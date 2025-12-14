@@ -9,6 +9,10 @@ Ce dossier contient tous les éléments nécessaires pour gérer le contenu édi
 ├── README.md              # Ce fichier - Documentation de la structure
 ├── articles/              # Articles rédactionnels
 │   ├── .gitkeep
+│   ├── drafts/            # Articles en attente de révision
+│   │   └── .gitkeep
+│   ├── published/         # Articles validés et prêts
+│   │   └── .gitkeep
 │   └── exemple-article.json  # Exemple de structure d'article
 ├── templates/             # Modèles pour créer de nouveaux articles
 │   ├── article-standard.json
@@ -50,10 +54,16 @@ Chaque article suit une structure JSON standardisée compatible avec le backend 
 ## 🔄 Workflow Éditorial
 
 1. **Création** : Utiliser un template depuis `templates/`
-2. **Rédaction** : Remplir le contenu dans `articles/`
-3. **Validation** : Révision et validation du contenu
-4. **Publication** : Transfert vers le backend via API
-5. **Ressources** : Ajouter les images dans `assets/images/`
+2. **Rédaction** : Créer l'article dans `articles/drafts/` (brouillons)
+3. **Validation** : Révision et validation du contenu par un éditeur humain
+4. **Publication** : Une fois validé, déplacer vers `articles/published/`
+5. **Intégration** : Transfert vers le backend via API depuis `published/`
+6. **Ressources** : Ajouter les images dans `assets/images/`
+
+### Dossiers de workflow
+
+- **`articles/drafts/`** : Articles générés automatiquement ou en cours de rédaction, en attente de révision humaine
+- **`articles/published/`** : Articles validés et approuvés, prêts pour la publication sur le site
 
 ## 📝 Templates Disponibles
 
@@ -76,7 +86,7 @@ Chaque article suit une structure JSON standardisée compatible avec le backend 
 ## 🔗 Intégration
 
 Cette structure s'intègre avec :
-- Le dossier `content/` (drafts/published) pour le workflow
+- Le workflow éditorial (drafts → published) intégré dans `articles/`
 - Le backend API pour la publication
 - Le frontend React pour l'affichage
 
