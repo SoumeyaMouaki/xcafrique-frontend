@@ -47,18 +47,34 @@ Chaque article suit une structure JSON standardisée compatible avec le backend 
   "image": "URL de l'image principale",
   "featured": false,
   "publishedAt": "2025-01-XX",
-  "tags": ["tag1", "tag2"]
+  "tags": ["tag1", "tag2"],
+  "status": "draft"
 }
 ```
 
+## 📊 Statuts Éditoriaux
+
+Chaque article doit avoir un champ `status` qui indique son état dans le workflow éditorial :
+
+- **`"draft"`** : Article en brouillon, en cours de rédaction ou en attente de révision humaine
+- **`"approved"`** : Article approuvé par l'éditeur, validé et prêt pour publication
+
+### Workflow des statuts
+
+1. **Création** → `"status": "draft"` (par défaut dans tous les templates)
+2. **Révision** → L'éditeur examine l'article
+3. **Approbation** → `"status": "approved"` (une fois validé)
+4. **Publication** → L'article approuvé peut être transféré vers le backend
+
 ## 🔄 Workflow Éditorial
 
-1. **Création** : Utiliser un template depuis `templates/`
-2. **Rédaction** : Créer l'article dans `articles/drafts/` (brouillons)
+1. **Création** : Utiliser un template depuis `templates/` (statut : `"draft"` par défaut)
+2. **Rédaction** : Créer l'article dans `articles/drafts/` avec `"status": "draft"`
 3. **Validation** : Révision et validation du contenu par un éditeur humain
-4. **Publication** : Une fois validé, déplacer vers `articles/published/`
-5. **Intégration** : Transfert vers le backend via API depuis `published/`
-6. **Ressources** : Ajouter les images dans `assets/images/`
+4. **Approbation** : Changer le statut à `"status": "approved"` une fois validé
+5. **Publication** : Déplacer l'article approuvé vers `articles/published/`
+6. **Intégration** : Transfert vers le backend via API depuis `published/`
+7. **Ressources** : Ajouter les images dans `assets/images/`
 
 ### Dossiers de workflow
 

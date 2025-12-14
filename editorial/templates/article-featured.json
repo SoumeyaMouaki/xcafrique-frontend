@@ -18,7 +18,7 @@
   "createdAt": "YYYY-MM-DDTHH:mm:ssZ",
   "updatedAt": "YYYY-MM-DDTHH:mm:ssZ",
   "tags": ["tag1", "tag2", "tag3"],
-  "status": "published",
+  "status": "draft",
   "views": 0,
   "readingTime": 0,
   "seo": {
@@ -29,4 +29,3 @@
   "priority": 1,
   "highlight": "Texte de mise en avant optionnel"
 }
-
