@@ -1,0 +1,30 @@
+{
+  "id": "ARTICLE-ID-À-REMPLACER",
+  "title": "Titre de l'article",
+  "excerpt": "Résumé court de l'article (150-200 caractères recommandés)",
+  "content": "<p>Contenu complet de l'article en HTML.</p><p>Vous pouvez utiliser des balises HTML standard :</p><ul><li>Paragraphes</li><li>Listes</li><li>Images</li><li>Liens</li></ul>",
+  "category": {
+    "id": "CATEGORIE-ID",
+    "name": "Nom de la catégorie"
+  },
+  "author": {
+    "id": "AUTHOR-ID",
+    "name": "Nom de l'auteur"
+  },
+  "image": "URL_DE_L_IMAGE_PRINCIPALE",
+  "featuredImage": "URL_DE_L_IMAGE_FEATURED",
+  "featured": false,
+  "publishedAt": "YYYY-MM-DDTHH:mm:ssZ",
+  "createdAt": "YYYY-MM-DDTHH:mm:ssZ",
+  "updatedAt": "YYYY-MM-DDTHH:mm:ssZ",
+  "tags": ["tag1", "tag2", "tag3"],
+  "status": "draft",
+  "views": 0,
+  "readingTime": 0,
+  "seo": {
+    "metaTitle": "Titre SEO optimisé",
+    "metaDescription": "Description SEO (150-160 caractères)",
+    "keywords": ["mot-clé1", "mot-clé2", "mot-clé3"]
+  }
+}
+
