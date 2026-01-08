@@ -82,7 +82,7 @@ export const handleApiError = (error) => {
     }
     
     return {
-      message: 'Impossible de contacter le serveur. Vérifiez que le backend est démarré sur http://localhost:5000',
+      message: 'Impossible de contacter le serveur. Vérifiez la configuration de l\'API.',
       status: 0
     }
   } else {

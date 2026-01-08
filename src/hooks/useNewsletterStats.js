@@ -22,8 +22,6 @@ const useNewsletterStats = () => {
       // Gérer le format de réponse du backend : { data: { total, confirmed } }
       const statsData = response.data?.data || response.data || {}
       
-      console.log('Statistiques newsletter récupérées:', statsData)
-      
       setStats({
         total: statsData.total || 0,
         confirmed: statsData.confirmed || 0,

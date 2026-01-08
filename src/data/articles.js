@@ -1,5 +1,6 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
+import API from '../api';
+import { extractApiData } from '../utils/apiHelpers';
 
 const useArticles = () => {
   const [articles, setArticles] = useState([]);
@@ -8,10 +9,12 @@ const useArticles = () => {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/articles'); // URL de ton backend
-        setArticles(res.data.data); // selon la structure de ton backend
+        const res = await API.get('/articles');
+        const articlesData = extractApiData(res);
+        setArticles(articlesData);
       } catch (err) {
-        console.error(err);
+        // Erreur silencieuse - l'application peut fonctionner sans articles
+        setArticles([]);
       } finally {
         setLoading(false);
       }

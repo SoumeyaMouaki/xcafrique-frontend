@@ -3,13 +3,13 @@
  * Gère la connexion WebSocket/SSE et les notifications
  */
 
-// Configuration - Utiliser la même logique que api.js
+// Configuration - Utiliser les variables d'environnement
 const getApiBaseUrl = () => {
   if (import.meta.env.PROD) {
-    return import.meta.env.VITE_API_URL || "http://localhost:5000"
+    return import.meta.env.VITE_API_URL || ''
   }
-  // En développement, utiliser localhost:5000 directement (pas de proxy pour WebSocket)
-  return "http://localhost:5000"
+  // En développement, utiliser le proxy Vite pour HTTP, mais URL directe pour WebSocket/SSE
+  return import.meta.env.VITE_API_URL || ''
 }
 
 const API_BASE_URL = getApiBaseUrl()
@@ -23,26 +23,23 @@ let sseConnection = null
  * Initialise la connexion pour les notifications
  */
 export const initNotificationConnection = () => {
-  // Pour WebSocket, utiliser directement localhost:5000 (le proxy Vite ne fonctionne pas pour WS)
-  const wsBaseUrl = import.meta.env.PROD 
-    ? (import.meta.env.VITE_API_URL || "http://localhost:5000")
-    : "http://localhost:5000"
-  
-  // URL WebSocket
+  if (!API_BASE_URL) {
+    // Pas d'URL configurée, ne pas initialiser
+    return
+  }
+
+  // Pour WebSocket, convertir HTTP en WebSocket
+  const wsBaseUrl = API_BASE_URL.replace(/\/api$/, '')
   const wsUrl = `${wsBaseUrl.replace(/^http/, 'ws').replace(/^https/, 'wss')}/api/newsletter/stream`
   
-  // Pour SSE, utiliser le proxy en développement ou l'URL directe en production
-  const sseBaseUrl = import.meta.env.PROD 
-    ? (import.meta.env.VITE_API_URL || "http://localhost:5000")
-    : "http://localhost:5000"
-  const sseUrl = `${sseBaseUrl}/api/newsletter/stream`
+  // Pour SSE, utiliser l'URL de base
+  const sseUrl = `${API_BASE_URL}/newsletter/stream`
 
   // Essayer WebSocket d'abord
   try {
     const ws = new WebSocket(wsUrl)
     
     ws.onopen = () => {
-      console.log('✅ WebSocket connecté pour les notifications')
       connectionType = 'websocket'
       wsConnection = ws
     }
@@ -53,7 +50,6 @@ export const initNotificationConnection = () => {
         
         // Si le message est directement un objet subscriber (format backend)
         if (data.email && (data.createdAt || data.timestamp)) {
-          console.log('Nouvel abonné reçu (WebSocket):', data.email, data.createdAt)
           handleNotification({
             event: 'new_subscriber',
             data: data
@@ -74,7 +70,6 @@ export const initNotificationConnection = () => {
     }
 
     ws.onclose = () => {
-      console.log('WebSocket fermé')
       wsConnection = null
       // Tentative de reconnexion après 3 secondes
       setTimeout(() => {
@@ -99,13 +94,12 @@ const initSSEConnection = (url) => {
     connectionType = 'sse'
 
     eventSource.onopen = () => {
-      console.log('✅ SSE connecté pour les notifications')
+      // SSE connecté
     }
 
     eventSource.addEventListener('new_subscriber', (event) => {
       try {
         const subscriber = JSON.parse(event.data)
-        console.log('Nouvel abonné reçu:', subscriber.email, subscriber.createdAt)
         
         // Gérer la notification avec le format direct du backend
         handleNotification({

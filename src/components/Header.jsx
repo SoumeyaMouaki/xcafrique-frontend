@@ -63,9 +63,6 @@ const Header = () => {
             }
           }
           
-          // Log pour déboguer
-          console.log('Réponse suggestions:', res.data)
-          
           // Essayer différentes structures de réponse
           // Cas 1: { suggestions: [...] }
           if (res.data?.suggestions && Array.isArray(res.data.suggestions)) {
@@ -90,7 +87,6 @@ const Header = () => {
               : [res.data.suggestions]
           }
           
-          console.log('Suggestions extraites:', suggestionsData)
           setSuggestions(suggestionsData)
           setShowSuggestions(suggestionsData.length > 0)
           

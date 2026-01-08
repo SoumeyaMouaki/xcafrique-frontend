@@ -16,7 +16,6 @@ const useSSE = (url) => {
       eventSourceRef.current = eventSource
 
       eventSource.onopen = () => {
-        console.log('✅ SSE connecté pour les notifications newsletter')
         setIsConnected(true)
       }
 
@@ -43,9 +42,9 @@ const useSSE = (url) => {
         console.error('❌ Erreur SSE:', error)
         setIsConnected(false)
         
-        // SSE se reconnecte automatiquement, mais on peut gérer les erreurs ici
+        // SSE se reconnecte automatiquement
         if (eventSource.readyState === EventSource.CLOSED) {
-          console.log('SSE fermé, tentative de reconnexion...')
+          setIsConnected(false)
         }
       }
     } catch (error) {

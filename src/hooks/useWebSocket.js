@@ -21,7 +21,6 @@ const useWebSocket = (url) => {
       wsRef.current = ws
 
       ws.onopen = () => {
-        console.log('✅ WebSocket connecté pour les notifications newsletter')
         setIsConnected(true)
         setReconnectAttempts(0)
       }
@@ -56,20 +55,15 @@ const useWebSocket = (url) => {
       }
 
       ws.onclose = () => {
-        console.log('WebSocket fermé')
         setIsConnected(false)
         
         // Tentative de reconnexion
         if (reconnectAttempts < maxReconnectAttempts) {
           const delay = reconnectDelay * (reconnectAttempts + 1)
-          console.log(`Tentative de reconnexion dans ${delay / 1000}s... (${reconnectAttempts + 1}/${maxReconnectAttempts})`)
-          
           reconnectTimeoutRef.current = setTimeout(() => {
             setReconnectAttempts(prev => prev + 1)
             connect()
           }, delay)
-        } else {
-          console.warn('Nombre maximum de tentatives de reconnexion atteint')
         }
       }
     } catch (error) {
