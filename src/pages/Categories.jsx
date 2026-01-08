@@ -37,27 +37,36 @@ const Categories = () => {
     fetchCategories()
   }, [])
 
-  // Récupérer les articles selon la catégorie sélectionnée
+  // Fonction pour récupérer les articles (accessible partout)
   const fetchArticles = async () => {
+    if (loadingCategories) return
+    
     try {
       setLoading(true)
       setError(false)
-      let url = '/articles?status=published'
+      // L'API retourne automatiquement uniquement les articles publiés
+      let url = '/articles'
+      const params = new URLSearchParams()
+      
       if (decodedCategory) {
-        // Chercher la catégorie par nom pour obtenir son ID
+        // Chercher la catégorie par nom pour obtenir son slug ou ID
         const foundCategory = allCategories.find(
-          cat => (cat.name || cat) === decodedCategory
+          cat => (cat.name || cat) === decodedCategory || (cat.slug || '') === decodedCategory
         )
         if (foundCategory) {
-          const categoryId = foundCategory._id || foundCategory.id
-          url += `&category=${categoryId}`
+          // Utiliser le slug de préférence (selon la documentation)
+          const categoryFilter = foundCategory.slug || foundCategory._id || foundCategory.id
+          params.append('category', categoryFilter)
         } else {
-          // Fallback: utiliser le nom directement
-          url += `&category=${encodeURIComponent(decodedCategory)}`
+          // Fallback: utiliser le nom/slug directement
+          params.append('category', decodedCategory)
         }
       }
       
-      const res = await API.get(url)
+      const queryString = params.toString()
+      const finalUrl = queryString ? `${url}?${queryString}` : url
+      
+      const res = await API.get(finalUrl)
       const articlesData = extractApiData(res)
       setArticles(articlesData)
     } catch (err) {
@@ -69,10 +78,9 @@ const Categories = () => {
   }
 
   useEffect(() => {
-    if (!loadingCategories) {
-      fetchArticles()
-    }
-  }, [decodedCategory, loadingCategories])
+    fetchArticles()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [decodedCategory, loadingCategories, allCategories])
 
   return (
     <div className="container mx-auto px-4 py-8">

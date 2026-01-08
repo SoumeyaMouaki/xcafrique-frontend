@@ -7,17 +7,20 @@ import API from '../api'
 import { useState, useEffect } from 'react'
 
 const ArticleDetail = () => {
-  const { id } = useParams()
+  const { slug } = useParams()
   const navigate = useNavigate()
   const [article, setArticle] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
 
   const fetchArticle = async () => {
+    if (!slug) return
+    
     try {
       setLoading(true)
       setError(false)
-      const res = await API.get(`/articles/${id}`)
+      // L'API utilise le slug, pas l'ID
+      const res = await API.get(`/articles/${slug}`)
       const articleData = extractApiItem(res)
       setArticle(articleData)
     } catch (err) {
@@ -32,7 +35,8 @@ const ArticleDetail = () => {
     fetchArticle()
     // scroll to top when opening article
     window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [id])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slug])
 
   if (loading) {
     return (
@@ -113,7 +117,7 @@ const ArticleDetail = () => {
   }
 
   // Gérer l'image (peut être image, featuredImage, etc.)
-  const imageSrc = article.image || article.featuredImage || 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&h=400&fit=crop'
+  const imageSrc = article.image || article.featuredImage
   
   // Gérer la catégorie
   const categoryName = article.category?.name || article.category || 'Général'
@@ -140,29 +144,31 @@ const ArticleDetail = () => {
         Retour
       </button>
 
-      <div className="relative h-64 md:h-96 mb-8 rounded-lg overflow-hidden shadow-xl">
-        <img
-          src={imageSrc}
-          alt={article.title}
-          className="w-full h-full object-cover"
-          loading="eager"
-          onError={(e) => {
-            e.target.src = 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&h=400&fit=crop'
-          }}
-        />
-        <div className="absolute top-4 left-4">
-          <span className="bg-primary-dark text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg">
-            {categoryName}
-          </span>
-        </div>
-        {article.featured && (
-          <div className="absolute top-4 right-4">
-            <span className="bg-accent-orange text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
-              ⭐ À la une
+      {imageSrc && (
+        <div className="relative h-64 md:h-96 mb-8 rounded-lg overflow-hidden shadow-xl bg-gray-200">
+          <img
+            src={imageSrc}
+            alt={article.title}
+            className="w-full h-full object-cover"
+            loading="eager"
+            onError={(e) => {
+              e.target.style.display = 'none'
+            }}
+          />
+          <div className="absolute top-4 left-4">
+            <span className="bg-primary-dark text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg">
+              {categoryName}
             </span>
           </div>
-        )}
-      </div>
+          {article.featured && (
+            <div className="absolute top-4 right-4">
+              <span className="bg-accent-orange text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                ⭐ À la une
+              </span>
+            </div>
+          )}
+        </div>
+      )}
 
       <header className="mb-8">
         <h1 className="text-3xl md:text-4xl font-bold text-primary-dark mb-4">
@@ -236,10 +242,10 @@ const ArticleDetail = () => {
         </div>
       </div>
 
-      {categoryName && categoryName !== 'Général' && (
+      {article.category && article.category.slug && (
         <div className="mt-12 pt-8 border-t border-gray-200">
           <Link
-            to={`/categories/${encodeURIComponent(categoryName)}`}
+            to={`/categories/${encodeURIComponent(article.category.slug)}`}
             className="text-primary-dark hover:text-primary-light font-medium transition-colors flex items-center group"
           >
             <svg className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">

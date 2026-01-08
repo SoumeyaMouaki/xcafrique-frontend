@@ -17,19 +17,17 @@ const Search = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
 
-  useEffect(() => {
-    if (query.trim()) {
-      performSearch(query)
-    } else {
-      setArticles([])
-    }
-  }, [query])
-
   const performSearch = async (searchQuery) => {
+    if (!searchQuery.trim()) {
+      setArticles([])
+      setLoading(false)
+      return
+    }
+    
     try {
       setLoading(true)
       setError(false)
-      const res = await API.get(`/articles?search=${encodeURIComponent(searchQuery)}&status=published`)
+      const res = await API.get(`/articles?search=${encodeURIComponent(searchQuery)}`)
       const articlesData = extractApiData(res)
       setArticles(articlesData)
     } catch (err) {
@@ -39,6 +37,10 @@ const Search = () => {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    performSearch(query)
+  }, [query])
 
   return (
     <div className="container mx-auto px-4 py-8">

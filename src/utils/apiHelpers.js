@@ -1,35 +1,32 @@
 /**
  * Utilitaires pour gérer les réponses de l'API
- * Gère les différentes structures de réponse possibles
+ * Gère la structure standardisée : { success, data, count, total, page, pages }
  */
 
 /**
  * Extrait les données d'une réponse API
- * Gère les structures : { data: [...] }, { data: { data: [...] } }, ou directement [...]
+ * Structure attendue : { success: true, data: [...], count, total, page, pages }
  */
 export const extractApiData = (response) => {
   if (!response || !response.data) {
     return []
   }
 
-  // Si response.data est un tableau, le retourner directement
-  if (Array.isArray(response.data)) {
-    return response.data
+  const apiResponse = response.data
+
+  // Vérifier que la réponse est un succès
+  if (apiResponse.success === false) {
+    return []
   }
 
-  // Si response.data.data existe et est un tableau
-  if (response.data.data && Array.isArray(response.data.data)) {
-    return response.data.data
+  // Si response.data.data existe et est un tableau (structure standardisée)
+  if (apiResponse.data && Array.isArray(apiResponse.data)) {
+    return apiResponse.data
   }
 
-  // Si response.data.data existe mais n'est pas un tableau, essayer response.data
-  if (response.data.data) {
-    return [response.data.data]
-  }
-
-  // Si response.data est un objet unique, le retourner dans un tableau
-  if (typeof response.data === 'object') {
-    return [response.data]
+  // Fallback pour compatibilité
+  if (Array.isArray(apiResponse.data)) {
+    return apiResponse.data
   }
 
   return []
@@ -37,19 +34,50 @@ export const extractApiData = (response) => {
 
 /**
  * Extrait un objet unique d'une réponse API
+ * Structure attendue : { success: true, data: {...} }
  */
 export const extractApiItem = (response) => {
   if (!response || !response.data) {
     return null
   }
 
-  // Si response.data est directement l'objet
-  if (typeof response.data === 'object' && !Array.isArray(response.data)) {
-    // Si c'est dans response.data.data
-    if (response.data.data && typeof response.data.data === 'object') {
-      return response.data.data
+  const apiResponse = response.data
+
+  // Vérifier que la réponse est un succès
+  if (apiResponse.success === false) {
+    return null
+  }
+
+  // Si response.data.data existe (structure standardisée)
+  if (apiResponse.data && typeof apiResponse.data === 'object' && !Array.isArray(apiResponse.data)) {
+    return apiResponse.data
+  }
+
+  // Fallback pour compatibilité
+  if (typeof apiResponse.data === 'object' && !Array.isArray(apiResponse.data)) {
+    return apiResponse.data
+  }
+
+  return null
+}
+
+/**
+ * Extrait les métadonnées de pagination d'une réponse API
+ */
+export const extractPagination = (response) => {
+  if (!response || !response.data) {
+    return null
+  }
+
+  const apiResponse = response.data
+
+  if (apiResponse.success && (apiResponse.page !== undefined || apiResponse.count !== undefined)) {
+    return {
+      page: apiResponse.page || 1,
+      pages: apiResponse.pages || 1,
+      total: apiResponse.total || 0,
+      count: apiResponse.count || 0
     }
-    return response.data
   }
 
   return null

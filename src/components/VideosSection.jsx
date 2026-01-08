@@ -1,53 +1,66 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import API from '../api'
+import { extractApiData } from '../utils/apiHelpers'
+import LoadingSpinner from './LoadingSpinner'
 
 /**
  * VideosSection - Carrousel de vidéos interactif
  */
 const VideosSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [videos, setVideos] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  // Données de vidéos fictives (à remplacer par des données API)
-  const videos = [
-    {
-      id: 1,
-      title: 'Ethiopian Airlines Expansion Strategy',
-      thumbnail: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&h=450&fit=crop',
-      duration: '5:32',
-    },
-    {
-      id: 2,
-      title: 'Lagos Airport Modernization Project',
-      thumbnail: 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=800&h=450&fit=crop',
-      duration: '8:15',
-    },
-    {
-      id: 3,
-      title: 'Pilot Training Programs in Africa',
-      thumbnail: 'https://images.unsplash.com/photo-1556388158-158ea5ccacbd?w=800&h=450&fit=crop',
-      duration: '6:42',
-    },
-    {
-      id: 4,
-      title: 'Air Safety Regulations Update',
-      thumbnail: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&h=450&fit=crop',
-      duration: '4:28',
-    },
-  ]
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const res = await API.get('/videos?limit=6')
+        const videosData = extractApiData(res)
+        setVideos(videosData)
+      } catch (err) {
+        setVideos([])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchVideos()
+  }, [])
 
   const nextVideo = () => {
-    setCurrentIndex((prev) => (prev + 1) % videos.length)
+    if (videos.length > 0) {
+      setCurrentIndex((prev) => (prev + 1) % videos.length)
+    }
   }
 
   const prevVideo = () => {
-    setCurrentIndex((prev) => (prev - 1 + videos.length) % videos.length)
+    if (videos.length > 0) {
+      setCurrentIndex((prev) => (prev - 1 + videos.length) % videos.length)
+    }
   }
 
   // Afficher 3 vidéos à la fois sur desktop
   const visibleVideos = []
-  for (let i = 0; i < 3; i++) {
-    const index = (currentIndex + i) % videos.length
-    visibleVideos.push(videos[index])
+  if (videos.length > 0) {
+    for (let i = 0; i < Math.min(3, videos.length); i++) {
+      const index = (currentIndex + i) % videos.length
+      visibleVideos.push(videos[index])
+    }
+  }
+
+  if (loading) {
+    return (
+      <section className="py-20 bg-primary-dark text-white">
+        <div className="container mx-auto px-4">
+          <LoadingSpinner text="Chargement des vidéos..." />
+        </div>
+      </section>
+    )
+  }
+
+  if (videos.length === 0) {
+    return null
   }
 
   return (
@@ -88,13 +101,18 @@ const VideosSection = () => {
                   className="relative group cursor-pointer"
                 >
                   <div className="relative h-48 overflow-hidden rounded-lg">
-                    <motion.img
-                      src={video.thumbnail}
-                      alt={video.title}
-                      className="w-full h-full object-cover"
-                      whileHover={{ scale: 1.1 }}
-                      transition={{ duration: 0.5 }}
-                    />
+                    {video.thumbnail && (
+                      <motion.img
+                        src={video.thumbnail}
+                        alt={video.title || 'Vidéo'}
+                        className="w-full h-full object-cover"
+                        whileHover={{ scale: 1.1 }}
+                        transition={{ duration: 0.5 }}
+                        onError={(e) => {
+                          e.target.style.display = 'none'
+                        }}
+                      />
+                    )}
                     {/* Overlay sombre */}
                     <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors"></div>
                     
@@ -112,14 +130,16 @@ const VideosSection = () => {
                     </div>
 
                     {/* Durée */}
-                    <div className="absolute bottom-2 right-2 bg-black/70 px-2 py-1 rounded text-sm">
-                      {video.duration}
-                    </div>
+                    {video.duration && (
+                      <div className="absolute bottom-2 right-2 bg-black/70 px-2 py-1 rounded text-sm">
+                        {video.duration}
+                      </div>
+                    )}
                   </div>
 
                   {/* Titre */}
                   <h3 className="mt-4 text-lg font-semibold group-hover:text-accent-orange transition-colors">
-                    {video.title}
+                    {video.title || video.name}
                   </h3>
                 </motion.div>
               ))}

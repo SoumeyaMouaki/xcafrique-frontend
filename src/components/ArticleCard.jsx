@@ -22,27 +22,29 @@ const ArticleCard = ({ article }) => {
   const categoryName = article.category?.name || article.category || 'Général'
   
   // Gérer l'image (peut être image, featuredImage, etc.)
-  const imageUrl = article.image || article.featuredImage || 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&h=400&fit=crop'
+  const imageUrl = article.image || article.featuredImage
   
   // Gérer l'auteur
   const authorName = article.author?.name || article.author || 'Équipe XC Afrique'
   
-  // Gérer l'ID (peut être _id ou id)
-  const articleId = article._id || article.id
+  // Utiliser le slug pour l'URL (selon la documentation API)
+  const articleSlug = article.slug || article._id || article.id
 
   return (
     <article className="card group animate-fadeIn">
       {/* Image de l'article */}
       <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-200 to-gray-300">
-        <img
-          src={imageUrl}
-          alt={article.title || 'Article'}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-          loading="lazy"
-          onError={(e) => {
-            e.target.src = 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&h=400&fit=crop'
-          }}
-        />
+        {imageUrl && (
+          <img
+            src={imageUrl}
+            alt={article.title || 'Article'}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            loading="lazy"
+            onError={(e) => {
+              e.target.style.display = 'none'
+            }}
+          />
+        )}
         {/* Overlay gradient pour meilleure lisibilité */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         {/* Badge catégorie */}
@@ -89,7 +91,7 @@ const ArticleCard = ({ article }) => {
 
         {/* Bouton Lire plus */}
         <Link
-          to={`/article/${articleId}`}
+          to={`/article/${articleSlug}`}
           className="btn-primary inline-block text-center w-full group/btn"
         >
           <span className="flex items-center justify-center">

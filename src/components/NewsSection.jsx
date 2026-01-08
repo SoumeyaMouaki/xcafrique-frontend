@@ -19,7 +19,7 @@ const NewsSection = () => {
       try {
         setLoading(true)
         setError(false)
-        const res = await API.get('/articles?limit=6&page=1&status=published')
+        const res = await API.get('/articles?limit=6&page=1')
         const data = extractApiData(res)
         setArticles(data)
       } catch (err) {
@@ -31,8 +31,6 @@ const NewsSection = () => {
     }
     fetchArticles()
   }, [])
-
-  const categories = ['Fleet', 'Infrastructure', 'Training', 'Safety', 'Technology', 'Regulation']
 
   if (loading) {
     return (
@@ -70,16 +68,21 @@ const NewsSection = () => {
           A la Une
         </motion.h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {articles.map((article, index) => {
-            const categoryName = article.category?.name || article.category || categories[index % categories.length]
-            const articleId = article._id || article.id
-            const imageUrl = article.image || article.featuredImage || 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&h=400&fit=crop'
+        {articles.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-lg">Aucun article disponible pour le moment.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {articles.map((article, index) => {
+            const categoryName = article.category?.name || article.category || 'Actualité'
+            const articleSlug = article.slug || article._id || article.id
+            const imageUrl = article.image || article.featuredImage
             const date = article.createdAt || article.date || article.publishedAt
 
             return (
               <motion.article
-                key={articleId}
+                key={article._id || article.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -87,16 +90,21 @@ const NewsSection = () => {
                 whileHover={{ y: -5 }}
                 className="bg-white rounded-lg shadow-md overflow-hidden group cursor-pointer"
               >
-                <Link to={`/article/${articleId}`}>
+                <Link to={`/article/${articleSlug}`}>
                   {/* Image */}
                   <div className="relative h-[248px] overflow-hidden bg-gray-200">
-                    <motion.img
-                      src={imageUrl}
-                      alt={article.title}
-                      className="w-full h-full object-cover"
-                      whileHover={{ scale: 1.1 }}
-                      transition={{ duration: 0.5 }}
-                    />
+                    {imageUrl && (
+                      <motion.img
+                        src={imageUrl}
+                        alt={article.title || 'Article'}
+                        className="w-full h-full object-cover"
+                        whileHover={{ scale: 1.1 }}
+                        transition={{ duration: 0.5 }}
+                        onError={(e) => {
+                          e.target.style.display = 'none'
+                        }}
+                      />
+                    )}
                     {/* Badge catégorie */}
                     <div className="absolute top-4 left-4">
                       <span className="bg-accent-orange text-white px-3 py-1 rounded-full text-xs font-semibold">
@@ -129,7 +137,8 @@ const NewsSection = () => {
               </motion.article>
             )
           })}
-        </div>
+          </div>
+        )}
       </div>
     </section>
   )

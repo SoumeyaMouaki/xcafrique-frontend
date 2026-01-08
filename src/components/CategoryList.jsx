@@ -138,15 +138,21 @@ const CategoryList = ({ categories: propCategories = null }) => {
         {categories.length > 0 ? (
           categories.map((category) => {
             const categoryName = category.name || category
-            const categoryId = category._id || category.id || categoryName
+            const categorySlug = category.slug || categoryName
+            const categoryId = category._id || category.id || categorySlug
             return (
               <li key={categoryId}>
                 <Link
-                  to={`/categories/${encodeURIComponent(categoryName)}`}
+                  to={`/categories/${encodeURIComponent(categorySlug)}`}
                   className="text-gray-700 hover:text-primary-dark hover:font-medium transition-colors flex items-center py-2 px-3 rounded-lg hover:bg-white group"
                 >
                   {getCategoryIcon(categoryName)}
                   {categoryName}
+                  {category.articleCount !== undefined && (
+                    <span className="ml-auto text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded-full">
+                      {category.articleCount}
+                    </span>
+                  )}
                 </Link>
               </li>
             )
