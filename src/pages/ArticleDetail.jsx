@@ -3,7 +3,7 @@ import SEO from '../components/SEO'
 import LoadingSpinner from '../components/LoadingSpinner'
 import ErrorMessage from '../components/ErrorMessage'
 import { extractApiItem, handleApiError } from '../utils/apiHelpers'
-import API from '../api'
+import API, { SITE_URL } from '../api'
 import { useState, useEffect } from 'react'
 
 const ArticleDetail = () => {
@@ -92,7 +92,7 @@ const ArticleDetail = () => {
 
   // Partage — safe because we returned early if no article
   const shareOnTwitter = () => {
-    const url = window.location.href
+    const url = `${SITE_URL}${window.location.pathname}`
     const text = article.title || 'XC Afrique'
     window.open(
       `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
@@ -101,7 +101,7 @@ const ArticleDetail = () => {
   }
 
   const shareOnFacebook = () => {
-    const url = window.location.href
+    const url = `${SITE_URL}${window.location.pathname}`
     window.open(
       `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
       '_blank'
@@ -109,7 +109,7 @@ const ArticleDetail = () => {
   }
 
   const shareOnLinkedIn = () => {
-    const url = window.location.href
+    const url = `${SITE_URL}${window.location.pathname}`
     window.open(
       `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
       '_blank'

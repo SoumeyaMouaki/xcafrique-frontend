@@ -4,8 +4,11 @@ import axios from "axios";
 // En développement avec proxy Vite, on utilise /api directement
 // En production, on utilise l'URL complète depuis les variables d'environnement
 const API_BASE_URL = import.meta.env.PROD 
-  ? (import.meta.env.VITE_API_URL || "http://localhost:5000/api")
+  ? (import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : "https://xcafrique-backend.vercel.app/api")
   : "/api"; // Utilise le proxy Vite en développement
+
+// URL du site pour les partages et liens
+export const SITE_URL = import.meta.env.VITE_SITE_URL || (import.meta.env.PROD ? "https://xcafrique.org" : window.location.origin);
 
 const API = axios.create({
   baseURL: API_BASE_URL,
