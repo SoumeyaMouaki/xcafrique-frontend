@@ -6,7 +6,7 @@ $envContent = @"
 # En développement, le proxy Vite est utilisé (voir vite.config.js)
 # En production, utilisez l'URL de votre API déployée
 
-# URL de base de l'API (sans /api à la fin)
+# URL de base de l'API (SANS /api à la fin - le code l'ajoute automatiquement)
 # Développement local - utilisez localhost pour le dev
 VITE_API_URL=http://localhost:5000
 

@@ -17,7 +17,7 @@ Ajoutez ces deux variables :
 #### Variable 1 : `VITE_API_URL`
 - **Valeur** : `https://xcafrique-backend.vercel.app`
 - **Environnements** : ✅ Production, ✅ Preview, ✅ Development
-- **Note** : Sans `/api` à la fin, le code ajoute automatiquement `/api`
+- **Note** : **SANS `/api` à la fin** - Le code ajoute automatiquement `/api`. Si vous mettez `/api`, le code le nettoie automatiquement pour éviter le double `/api/api/`
 
 #### Variable 2 : `VITE_SITE_URL`
 - **Valeur** : `https://xcafrique.org`

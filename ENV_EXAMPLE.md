@@ -7,7 +7,7 @@ Créez un fichier `.env` à la racine du projet avec les variables suivantes :
 # En développement, le proxy Vite est utilisé (voir vite.config.js)
 # En production, définissez l'URL complète de votre API
 
-# URL de base de l'API (sans /api à la fin)
+# URL de base de l'API (SANS /api à la fin - le code l'ajoute automatiquement)
 # Développement local
 VITE_API_URL=http://localhost:5000
 
