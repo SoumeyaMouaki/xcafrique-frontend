@@ -39,23 +39,71 @@ const Subscribe = () => {
 
     try {
       // Envoyer l'abonnement à l'API
-      // Note: Vous devrez peut-être adapter l'endpoint selon votre backend
-      await API.post('/newsletter/subscribe', {
+      const response = await API.post('/newsletter/subscribe', {
         email: email.trim(),
         name: name.trim() || undefined,
         source: 'website'
       })
       
-      setSubmitStatus('success')
-      setEmail('')
-      setName('')
+      // Vérifier la structure de la réponse
+      const responseData = response.data?.data || response.data || {}
       
-      // Réinitialiser le message après 5 secondes
-      setTimeout(() => setSubmitStatus(null), 5000)
+      // Log pour débogage (à retirer en production si nécessaire)
+      console.log('✅ Abonnement newsletter - Réponse API:', {
+        success: response.data?.success,
+        message: response.data?.message,
+        data: responseData,
+        confirmationRequired: responseData.confirmationRequired
+      })
+      
+      // Vérifier si l'abonnement a réussi
+      if (response.data?.success !== false) {
+        setSubmitStatus('success')
+        setEmail('')
+        setName('')
+        
+        // Réinitialiser le message après 8 secondes (plus de temps pour lire)
+        setTimeout(() => setSubmitStatus(null), 8000)
+      } else {
+        // Le backend a retourné success: false
+        const errorMessage = response.data?.message || 'Impossible de vous abonner pour le moment.'
+        setErrorMsg(errorMessage)
+        setSubmitStatus('error')
+      }
     } catch (err) {
-      console.error('Erreur abonnement newsletter:', err)
-      const serverMsg = err?.response?.data?.message || 'Impossible de vous abonner pour le moment. Veuillez réessayer plus tard.'
-      setErrorMsg(serverMsg)
+      // Log détaillé pour débogage
+      console.error('❌ Erreur abonnement newsletter:', {
+        message: err.message,
+        response: err.response?.data,
+        status: err.response?.status,
+        url: err.config?.url,
+        baseURL: err.config?.baseURL
+      })
+      
+      // Gérer les différents types d'erreurs
+      const errorCode = err.response?.data?.error
+      const errorMessage = err.response?.data?.message
+      const statusCode = err.response?.status
+      
+      let userMessage = 'Impossible de vous abonner pour le moment. Veuillez réessayer plus tard.'
+      
+      if (errorCode === 'EMAIL_ALREADY_SUBSCRIBED' || statusCode === 409) {
+        userMessage = 'Cet email est déjà abonné à notre newsletter. Vérifiez votre boîte mail (et les spams) pour le lien de confirmation.'
+      } else if (errorCode === 'INVALID_EMAIL' || statusCode === 400) {
+        userMessage = 'Adresse email invalide. Veuillez vérifier votre email.'
+      } else if (statusCode === 404) {
+        userMessage = 'Service d\'abonnement non disponible. Veuillez réessayer plus tard ou contactez-nous.'
+        console.error('⚠️ Endpoint /newsletter/subscribe non trouvé (404). Vérifiez que le backend est bien démarré et que l\'URL est correcte.')
+      } else if (statusCode === 500) {
+        userMessage = 'Erreur serveur. Veuillez réessayer plus tard ou contactez-nous si le problème persiste.'
+      } else if (errorMessage) {
+        userMessage = errorMessage
+      } else if (err.code === 'ERR_NETWORK' || err.message === 'Network Error') {
+        userMessage = 'Erreur de connexion. Vérifiez votre connexion internet et réessayez.'
+        console.error('⚠️ Erreur réseau. Vérifiez que le backend est accessible et que CORS est configuré correctement.')
+      }
+      
+      setErrorMsg(userMessage)
       setSubmitStatus('error')
     } finally {
       setIsSubmitting(false)
@@ -175,8 +223,13 @@ const Subscribe = () => {
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                     <div>
-                      <span className="font-medium block mb-1">Abonnement réussi !</span>
-                      <span className="text-sm block">Vérifiez votre boîte mail et cliquez sur le lien de confirmation pour activer votre abonnement.</span>
+                      <span className="font-medium block mb-1">✅ Abonnement réussi !</span>
+                      <span className="text-sm block">
+                        Vérifiez votre boîte mail <strong>(et votre dossier spam/courrier indésirable)</strong> et cliquez sur le lien de confirmation pour activer votre abonnement.
+                      </span>
+                      <span className="text-xs block mt-2 text-green-600">
+                        💡 Si vous ne recevez pas l'email dans quelques minutes, vérifiez votre dossier spam ou contactez-nous.
+                      </span>
                     </div>
                   </div>
                 </motion.div>
