@@ -98,9 +98,15 @@ const Subscribe = () => {
         userMessage = 'Erreur serveur. Veuillez réessayer plus tard ou contactez-nous si le problème persiste.'
       } else if (errorMessage) {
         userMessage = errorMessage
-      } else if (err.code === 'ERR_NETWORK' || err.message === 'Network Error') {
-        userMessage = 'Erreur de connexion. Vérifiez votre connexion internet et réessayez.'
-        console.error('⚠️ Erreur réseau. Vérifiez que le backend est accessible et que CORS est configuré correctement.')
+      } else if (err.code === 'ERR_NETWORK' || err.message === 'Network Error' || err.code === 'ERR_CONNECTION_REFUSED') {
+        userMessage = 'Le backend n\'est pas accessible. Assurez-vous que le serveur backend est démarré sur http://localhost:5000'
+        console.error('⚠️ Erreur de connexion au backend:', {
+          code: err.code,
+          message: err.message,
+          url: err.config?.url,
+          baseURL: err.config?.baseURL,
+          suggestion: 'Démarrez le backend avec: npm run dev (dans le dossier backend)'
+        })
       }
       
       setErrorMsg(userMessage)

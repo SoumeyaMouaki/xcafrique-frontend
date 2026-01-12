@@ -96,21 +96,32 @@ export const handleApiError = (error) => {
     }
   } else if (error.request) {
     // Requête envoyée mais pas de réponse
-    // Détecter les erreurs CORS
-    const isCorsError = error.code === 'ERR_NETWORK' || 
-                       error.message === 'Network Error' ||
-                       (error.request && error.request.status === 0);
+    // Détecter les erreurs de connexion
+    const isConnectionRefused = error.code === 'ERR_CONNECTION_REFUSED' || 
+                                error.code === 'ECONNREFUSED';
+    const isNetworkError = error.code === 'ERR_NETWORK' || 
+                          error.message === 'Network Error' ||
+                          (error.request && error.request.status === 0);
     
-    if (isCorsError) {
+    if (isConnectionRefused) {
       return {
-        message: 'Erreur CORS: Le backend n\'autorise pas les requêtes depuis cette origine. Redémarrez le serveur de développement ou vérifiez la configuration CORS du backend.',
+        message: 'Le backend n\'est pas accessible. Assurez-vous que le serveur backend est démarré sur http://localhost:5000',
+        status: 0,
+        isConnectionRefused: true,
+        suggestion: 'Démarrez le backend avec: npm run dev (dans le dossier backend)'
+      }
+    }
+    
+    if (isNetworkError) {
+      return {
+        message: 'Erreur CORS ou réseau: Le backend n\'autorise pas les requêtes depuis cette origine. Vérifiez que le backend est démarré et que CORS est configuré correctement.',
         status: 0,
         isCors: true
       }
     }
     
     return {
-      message: 'Impossible de contacter le serveur. Vérifiez la configuration de l\'API.',
+      message: 'Impossible de contacter le serveur. Vérifiez que le backend est démarré sur http://localhost:5000',
       status: 0
     }
   } else {

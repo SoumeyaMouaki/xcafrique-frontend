@@ -22,14 +22,23 @@ const ConfirmEmail = () => {
       if (!token) {
         setStatus('error')
         setMessage('Token de confirmation manquant.')
+        console.error('❌ Token de confirmation manquant dans l\'URL')
         return
       }
 
       try {
+        console.log('✅ Confirmation email - Envoi du token au backend:', { token: token.substring(0, 10) + '...' })
+        
         const response = await API.post('/newsletter/confirm', { token })
         
         // Gérer différents formats de réponse
         const responseData = response.data?.data || response.data || {}
+        
+        console.log('✅ Confirmation email - Réponse du backend:', {
+          success: response.data?.success,
+          email: responseData.email,
+          message: responseData.message
+        })
         
         setStatus('success')
         setEmail(responseData.email || '')
@@ -40,7 +49,14 @@ const ConfirmEmail = () => {
           navigate('/')
         }, 5000)
       } catch (error) {
-        console.error('Erreur confirmation email:', error)
+        console.error('❌ Erreur confirmation email:', {
+          message: error.message,
+          response: error.response?.data,
+          status: error.response?.status,
+          code: error.code,
+          url: error.config?.url,
+          baseURL: error.config?.baseURL
+        })
         
         const errorCode = error.response?.data?.error || error.response?.status
         const errorMessage = error.response?.data?.message || 'Une erreur est survenue lors de la confirmation.'
@@ -51,6 +67,9 @@ const ConfirmEmail = () => {
         } else if (errorCode === 'TOKEN_INVALID' || errorCode === 400) {
           setStatus('error')
           setMessage('Lien de confirmation invalide.')
+        } else if (error.code === 'ERR_CONNECTION_REFUSED' || error.code === 'ERR_NETWORK') {
+          setStatus('error')
+          setMessage('Impossible de contacter le serveur. Vérifiez votre connexion et réessayez.')
         } else {
           setStatus('error')
           setMessage(errorMessage)

@@ -115,6 +115,14 @@ Pour intégrer un backend :
 3. Ajouter la gestion d'état (Redux, Context API, ou Zustand) si nécessaire
 4. Implémenter l'authentification si des fonctionnalités admin sont nécessaires
 
+## 📚 Documentation
+
+- `API_DOCUMENTATION.md` - Documentation complète de l'API backend
+- `BACKEND_SETUP.md` - Guide de configuration backend
+- `ENV_EXAMPLE.md` - Exemple de variables d'environnement
+- `TROUBLESHOOTING.md` - Guide de dépannage des erreurs courantes
+- `VERCEL_FRONTEND_URL_CONFIG.md` - Configuration FRONTEND_URL_PROD pour Vercel
+
 ## 📄 Licence
 
 Ce projet est un frontend de démonstration pour le blog XC Afrique.
