@@ -138,7 +138,10 @@ const CategoryList = ({ categories: propCategories = null }) => {
         {categories.length > 0 ? (
           categories.map((category) => {
             const categoryName = category.name || category
-            const categorySlug = category.slug || categoryName
+            // Normaliser le slug comme le backend
+            const categorySlug = category.slug 
+              ? category.slug.trim().toLowerCase() 
+              : (categoryName || '').trim().toLowerCase().replace(/\s+/g, '-')
             const categoryId = category._id || category.id || categorySlug
             return (
               <li key={categoryId}>

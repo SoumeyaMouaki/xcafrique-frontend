@@ -37,6 +37,12 @@ const Categories = () => {
     fetchCategories()
   }, [])
 
+  // Normaliser un slug (comme le backend)
+  const normalizeSlug = (slug) => {
+    if (!slug) return ''
+    return slug.toString().trim().toLowerCase()
+  }
+
   // Fonction pour récupérer les articles (accessible partout)
   const fetchArticles = async () => {
     if (loadingCategories) return
@@ -49,17 +55,28 @@ const Categories = () => {
       const params = new URLSearchParams()
       
       if (decodedCategory) {
-        // Chercher la catégorie par nom pour obtenir son slug ou ID
+        // Normaliser le slug de la catégorie (comme le backend)
+        const normalizedSlug = normalizeSlug(decodedCategory)
+        
+        // Chercher la catégorie par slug normalisé ou nom
         const foundCategory = allCategories.find(
-          cat => (cat.name || cat) === decodedCategory || (cat.slug || '') === decodedCategory
+          cat => {
+            const catSlug = normalizeSlug(cat.slug || '')
+            const catName = (cat.name || '').toLowerCase()
+            return catSlug === normalizedSlug || 
+                   catName === normalizedSlug ||
+                   catSlug === decodedCategory ||
+                   (cat.name || cat) === decodedCategory
+          }
         )
+        
         if (foundCategory) {
-          // Utiliser le slug de préférence (selon la documentation)
-          const categoryFilter = foundCategory.slug || foundCategory._id || foundCategory.id
+          // Utiliser le slug de préférence (normalisé comme le backend)
+          const categoryFilter = normalizeSlug(foundCategory.slug || foundCategory._id || foundCategory.id)
           params.append('category', categoryFilter)
         } else {
-          // Fallback: utiliser le nom/slug directement
-          params.append('category', decodedCategory)
+          // Utiliser directement le slug normalisé (le backend le gère maintenant)
+          params.append('category', normalizedSlug)
         }
       }
       
@@ -68,10 +85,26 @@ const Categories = () => {
       
       const res = await API.get(finalUrl)
       const articlesData = extractApiData(res)
+      
+      // L'API retourne maintenant toujours 200 avec un tableau vide si pas d'articles
+      // Plus besoin de gérer les erreurs 404 pour les catégories vides
       setArticles(articlesData)
+      
+      // Afficher le message informatif de l'API si disponible
+      if (res.data?.message && articlesData.length === 0) {
+        console.log('Message API:', res.data.message)
+      }
     } catch (err) {
-      console.error('Erreur récupération articles:', handleApiError(err))
-      setError(true)
+      const apiError = handleApiError(err)
+      // Ne pas afficher d'erreur si c'est juste une catégorie vide (l'API retourne 200 maintenant)
+      // Seulement pour les vraies erreurs réseau/CORS
+      if (apiError.status !== 200 && apiError.status !== 0) {
+        console.error('Erreur récupération articles:', apiError)
+        setError(true)
+      } else {
+        // Catégorie vide ou erreur réseau - afficher tableau vide
+        setArticles([])
+      }
     } finally {
       setLoading(false)
     }
@@ -130,7 +163,14 @@ const Categories = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
               <p className="text-gray-600 text-lg mb-4">
-                Aucun article trouvé {decodedCategory ? `dans la catégorie "${decodedCategory}"` : 'pour le moment'}.
+                {decodedCategory 
+                  ? `Aucun article trouvé dans la catégorie "${decodedCategory}".` 
+                  : 'Aucun article disponible pour le moment.'}
+              </p>
+              <p className="text-gray-500 text-sm mb-6">
+                {decodedCategory 
+                  ? 'Cette catégorie sera bientôt alimentée avec du contenu.' 
+                  : 'Revenez bientôt pour découvrir nos nouveaux articles.'}
               </p>
               {decodedCategory && (
                 <Link to="/categories" className="btn-primary inline-block">
