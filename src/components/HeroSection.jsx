@@ -45,6 +45,17 @@ const HeroSection = () => {
                 Lire les dernières actualités
               </Link>
             </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Link
+                to="/follow"
+                className="inline-block bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary-dark transition-colors duration-200"
+              >
+                S'abonner
+              </Link>
+            </motion.div>
           </div>
         </motion.div>
       </div>
