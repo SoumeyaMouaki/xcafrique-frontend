@@ -3,7 +3,6 @@ import { useEffect } from 'react'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import NotificationContainer from './components/NotificationContainer'
-import { initNotificationConnection, closeNotificationConnection } from './services/notificationService'
 import Home from './pages/Home'
 import Categories from './pages/Categories'
 import ArticleDetail from './pages/ArticleDetail'
@@ -11,9 +10,6 @@ import Videos from './pages/Videos'
 import Search from './pages/Search'
 import About from './pages/About'
 import Contact from './pages/Contact'
-import Subscribe from './pages/Subscribe'
-import Dashboard from './pages/Dashboard'
-import ConfirmEmail from './pages/ConfirmEmail'
 
 /**
  * Composant principal de l'application
@@ -47,18 +43,6 @@ function App() {
     }
   }, [])
 
-  // Initialiser la connexion pour les notifications en temps réel
-  useEffect(() => {
-    // Attendre un peu que l'application soit complètement chargée
-    const timer = setTimeout(() => {
-      initNotificationConnection()
-    }, 1000)
-
-    return () => {
-      clearTimeout(timer)
-      closeNotificationConnection()
-    }
-  }, [])
 
   return (
     <Router>
@@ -74,9 +58,6 @@ function App() {
             <Route path="/search" element={<Search />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/subscribe" element={<Subscribe />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/confirm-email" element={<ConfirmEmail />} />
           </Routes>
         </main>
         <Footer />

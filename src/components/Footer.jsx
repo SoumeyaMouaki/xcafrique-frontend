@@ -1,18 +1,10 @@
 import { Link } from 'react-router-dom'
-import { useState } from 'react'
 
 /**
- * Footer - Pied de page complet en 4 colonnes
+ * Footer - Pied de page complet en 3 colonnes
  */
 const Footer = () => {
-  const [email, setEmail] = useState('')
   const currentYear = new Date().getFullYear()
-
-  const handleSubscribe = (e) => {
-    e.preventDefault()
-    // Rediriger vers la page d'abonnement
-    window.location.href = '/subscribe'
-  }
 
   const socialLinks = [
     { name: 'Facebook', icon: 'M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z', href: 'https://facebook.com' },
@@ -42,7 +34,7 @@ const Footer = () => {
   return (
     <footer className="bg-primary-dark text-white">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Colonne 1 - Branding */}
           <div>
             <div className="flex items-center space-x-2 mb-4">
@@ -103,30 +95,6 @@ const Footer = () => {
                 </li>
               ))}
             </ul>
-          </div>
-
-          {/* Colonne 4 - Newsletter */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Newsletter</h3>
-            <p className="text-gray-300 text-sm mb-4">
-              Stay informed about African aviation news
-            </p>
-            <form onSubmit={handleSubscribe} className="space-y-2">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Your email"
-                className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent-orange focus:border-transparent"
-                required
-              />
-              <button
-                type="submit"
-                className="w-full bg-accent-orange text-white px-4 py-2 rounded-lg font-semibold hover:bg-orange-600 transition-colors duration-200"
-              >
-                Subscribe
-              </button>
-            </form>
           </div>
         </div>
 
