@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { useEffect } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import NotificationContainer from './components/NotificationContainer'
@@ -66,6 +67,8 @@ function App() {
         {/* Container de notifications en temps réel */}
         <NotificationContainer />
       </div>
+      {/* Vercel Analytics */}
+      <Analytics />
     </Router>
   )
 }
