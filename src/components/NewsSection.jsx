@@ -76,6 +76,7 @@ const NewsSection = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {articles.map((article, index) => {
             const categoryName = article.category?.name || article.category || 'Actualité'
+            const categoryColor = article.category?.color || '#EA580C' // Couleur par défaut (accent-orange)
             const articleSlug = article.slug || article._id || article.id
             const imageUrl = article.image || article.featuredImage
             const date = article.createdAt || article.date || article.publishedAt
@@ -105,9 +106,12 @@ const NewsSection = () => {
                         }}
                       />
                     )}
-                    {/* Badge catégorie */}
+                    {/* Badge catégorie avec couleur */}
                     <div className="absolute top-4 left-4">
-                      <span className="bg-accent-orange text-white px-3 py-1 rounded-full text-xs font-semibold">
+                      <span 
+                        className="text-white px-3 py-1 rounded-full text-xs font-semibold"
+                        style={{ backgroundColor: categoryColor }}
+                      >
                         {categoryName}
                       </span>
                     </div>

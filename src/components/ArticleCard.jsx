@@ -20,6 +20,8 @@ const ArticleCard = ({ article }) => {
 
   // Gérer la catégorie (peut être un objet ou une string)
   const categoryName = article.category?.name || article.category || 'Général'
+  const categoryColor = article.category?.color || '#1E40AF' // Couleur par défaut (primary-dark)
+  const categorySlug = article.category?.slug || ''
   
   // Gérer l'image (peut être image, featuredImage, etc.)
   const imageUrl = article.image || article.featuredImage
@@ -47,9 +49,12 @@ const ArticleCard = ({ article }) => {
         )}
         {/* Overlay gradient pour meilleure lisibilité */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        {/* Badge catégorie */}
+        {/* Badge catégorie avec couleur */}
         <div className="absolute top-4 left-4 z-10">
-          <span className="bg-primary-dark text-white px-3 py-1 rounded-full text-xs font-medium shadow-lg backdrop-blur-sm">
+          <span 
+            className="text-white px-3 py-1 rounded-full text-xs font-medium shadow-lg backdrop-blur-sm"
+            style={{ backgroundColor: categoryColor }}
+          >
             {categoryName}
           </span>
         </div>

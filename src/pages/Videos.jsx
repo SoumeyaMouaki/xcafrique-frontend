@@ -150,7 +150,12 @@ const Videos = () => {
                 )}
                 {video.category && (
                   <div className="absolute top-2 left-2">
-                    <span className="bg-accent-orange text-white px-2 py-1 rounded text-xs font-semibold">
+                    <span 
+                      className="text-white px-2 py-1 rounded text-xs font-semibold"
+                      style={{ 
+                        backgroundColor: video.category?.color || '#EA580C' 
+                      }}
+                    >
                       {video.category?.name || video.category}
                     </span>
                   </div>
