@@ -52,7 +52,7 @@ const About = () => {
               Soumeya Mouaki Benani Benani
             </h2>
             <p className="text-lg font-semibold text-primary-dark mb-2">
-              Fondatrice & Directrice de XCAfrique
+              Fondatrice & CEO de XCAfrique
             </p>
             <h3 className="text-lg text-accent-gray mb-4">
               Journaliste & consultante en communication spécialisée dans le secteur aérien
