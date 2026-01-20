@@ -15,30 +15,27 @@ const getApiBaseUrl = () => {
   }
   
   // En production (déployé), utiliser l'URL du backend déployé
-  if (import.meta.env.PROD) {
-    const baseUrl = import.meta.env.VITE_API_URL || 'https://xcafrique-backend.vercel.app'
-    // Nettoyer l'URL si elle contient déjà /api
-    const cleanUrl = baseUrl.replace(/\/api\/?$/, '')
-    // Ajouter /api à la fin
-    return `${cleanUrl}/api`
-  }
+  // Priorité : VITE_API_URL depuis les variables d'environnement Vercel
+  const baseUrl = import.meta.env.VITE_API_URL || 'https://xcafrique-backend.vercel.app'
   
-  // Fallback : utiliser le proxy Vite
-  return "/api"
+  // Nettoyer l'URL si elle contient déjà /api
+  const cleanUrl = baseUrl.replace(/\/api\/?$/, '')
+  
+  // Ajouter /api à la fin
+  return `${cleanUrl}/api`
 }
 
 const API_BASE_URL = getApiBaseUrl()
 
-// Log pour déboguer (uniquement en développement)
-if (!import.meta.env.PROD) {
-  console.log('🔧 Configuration API:', {
-    hostname: window.location.hostname,
-    isLocalDev: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1',
-    apiBaseUrl: API_BASE_URL,
-    envProd: import.meta.env.PROD,
-    viteApiUrl: import.meta.env.VITE_API_URL
-  })
-}
+// Log pour déboguer (toujours actif pour voir la config en production)
+console.log('🔧 Configuration API:', {
+  hostname: window.location.hostname,
+  isLocalDev: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1',
+  apiBaseUrl: API_BASE_URL,
+  envProd: import.meta.env.PROD,
+  viteApiUrl: import.meta.env.VITE_API_URL,
+  mode: import.meta.env.MODE
+})
 
 // URL du site pour les partages et liens
 export const SITE_URL = import.meta.env.VITE_SITE_URL || (import.meta.env.PROD ? "https://xcafrique.org" : window.location.origin);
