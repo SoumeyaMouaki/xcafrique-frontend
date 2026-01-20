@@ -1,29 +1,7 @@
-import { useEffect, useState } from 'react';
-import API from '../api';
-import { extractApiData } from '../utils/apiHelpers';
-
-const useArticles = () => {
-  const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchArticles = async () => {
-      try {
-        const res = await API.get('/articles');
-        const articlesData = extractApiData(res);
-        setArticles(articlesData);
-      } catch (err) {
-        // Erreur silencieuse - l'application peut fonctionner sans articles
-        setArticles([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchArticles();
-  }, []);
-
-  return { articles, loading };
-};
+/**
+ * @deprecated Ce fichier est déprécié. Utilisez src/hooks/useArticles.js à la place.
+ * Ce fichier est conservé pour la compatibilité ascendante.
+ */
+import useArticles from '../hooks/useArticles';
 
 export default useArticles;

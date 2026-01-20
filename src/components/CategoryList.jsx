@@ -174,7 +174,6 @@ const CategoryList = ({ categories: propCategories = null }) => {
                 ? category.slug.trim().toLowerCase() 
                 : (categoryName || '').trim().toLowerCase().replace(/\s+/g, '-')
               const categoryId = category._id || category.id || categorySlug
-              const categoryColor = category.color || '#6B7280' // Couleur par défaut si absente
               
               return (
                 <li key={categoryId}>
@@ -182,17 +181,17 @@ const CategoryList = ({ categories: propCategories = null }) => {
                     to={`/categories/${encodeURIComponent(categorySlug)}`}
                     className="text-gray-700 hover:text-primary-dark hover:font-medium transition-colors flex items-center py-2 px-3 rounded-lg hover:bg-white group"
                     style={{
-                      borderLeft: `3px solid ${categoryColor}`
+                      borderLeft: `3px solid ${category.color || '#6B7280'}`
                     }}
                   >
-                    <span style={{ color: categoryColor }}>
+                    <span style={{ color: category.color || '#6B7280' }}>
                       {getCategoryIcon(categorySlug)}
                     </span>
                     <span className="flex-1">{categoryName}</span>
                     {category.articleCount !== undefined && (
                       <span 
                         className="ml-auto text-xs text-white px-2 py-1 rounded-full"
-                        style={{ backgroundColor: categoryColor }}
+                        style={{ backgroundColor: category.color || '#6B7280' }}
                       >
                         {category.articleCount}
                       </span>

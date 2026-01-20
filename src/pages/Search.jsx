@@ -1,7 +1,5 @@
 import { useSearchParams, Link } from 'react-router-dom'
-import { useState, useEffect } from 'react'
-import API from '../api'
-import { extractApiData, handleApiError } from '../utils/apiHelpers'
+import useArticles from '../hooks/useArticles'
 import ArticleCard from '../components/ArticleCard'
 import LoadingSpinner from '../components/LoadingSpinner'
 import ErrorMessage from '../components/ErrorMessage'
@@ -11,36 +9,14 @@ import SEO from '../components/SEO'
  * Page Search - Résultats de recherche
  */
 const Search = () => {
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams] = useSearchParams()
   const query = searchParams.get('q') || ''
-  const [articles, setArticles] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
-
-  const performSearch = async (searchQuery) => {
-    if (!searchQuery.trim()) {
-      setArticles([])
-      setLoading(false)
-      return
-    }
-    
-    try {
-      setLoading(true)
-      setError(false)
-      const res = await API.get(`/articles?search=${encodeURIComponent(searchQuery)}`)
-      const articlesData = extractApiData(res)
-      setArticles(articlesData)
-    } catch (err) {
-      console.error('Erreur recherche:', handleApiError(err))
-      setError(true)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    performSearch(query)
-  }, [query])
+  
+  // Utiliser le hook useArticles avec le paramètre de recherche
+  const { articles, loading, error } = useArticles({
+    search: query || undefined,
+    limit: 20
+  })
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -73,8 +49,8 @@ const Search = () => {
         <LoadingSpinner text="Recherche en cours..." />
       ) : error ? (
         <ErrorMessage 
-          message="Erreur lors de la recherche. Veuillez réessayer." 
-          onRetry={() => performSearch(query)}
+          message={error.message || "Erreur lors de la recherche. Veuillez réessayer."} 
+          onRetry={() => window.location.reload()}
         />
       ) : articles.length > 0 ? (
         <>

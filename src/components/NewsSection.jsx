@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { useState, useEffect } from 'react'
-import API from '../api'
-import { extractApiData, handleApiError } from '../utils/apiHelpers'
+import useArticles from '../hooks/useArticles'
 import LoadingSpinner from './LoadingSpinner'
 import ErrorMessage from './ErrorMessage'
 
@@ -10,27 +8,7 @@ import ErrorMessage from './ErrorMessage'
  * NewsSection - Grille d'actualités avec 6 articles
  */
 const NewsSection = () => {
-  const [articles, setArticles] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
-
-  useEffect(() => {
-    const fetchArticles = async () => {
-      try {
-        setLoading(true)
-        setError(false)
-        const res = await API.get('/articles?limit=6&page=1')
-        const data = extractApiData(res)
-        setArticles(data)
-      } catch (err) {
-        console.error('Erreur récupération articles:', handleApiError(err))
-        setError(true)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchArticles()
-  }, [])
+  const { articles, loading, error } = useArticles({ limit: 6, page: 1 })
 
   if (loading) {
     return (
@@ -47,7 +25,7 @@ const NewsSection = () => {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <ErrorMessage 
-            message="Impossible de charger les actualités" 
+            message={error.message || "Impossible de charger les actualités"} 
             onRetry={() => window.location.reload()}
           />
         </div>
@@ -75,11 +53,22 @@ const NewsSection = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {articles.map((article, index) => {
+            // Vérifier que l'article existe
+            if (!article) return null
+            
             const categoryName = article.category?.name || article.category || 'Actualité'
-            const categoryColor = article.category?.color || '#EA580C' // Couleur par défaut (accent-orange)
+            // Utiliser le slug de préférence, encoder pour l'URL
             const articleSlug = article.slug || article._id || article.id
             const imageUrl = article.image || article.featuredImage
             const date = article.createdAt || article.date || article.publishedAt
+
+            // Encoder le slug pour l'URL (gérer les caractères spéciaux)
+            // Si pas de slug valide, ne pas créer de lien
+            if (!articleSlug) {
+              console.warn('NewsSection: Article sans slug valide:', article)
+              return null
+            }
+            const encodedSlug = encodeURIComponent(String(articleSlug))
 
             return (
               <motion.article
@@ -91,7 +80,7 @@ const NewsSection = () => {
                 whileHover={{ y: -5 }}
                 className="bg-white rounded-lg shadow-md overflow-hidden group cursor-pointer"
               >
-                <Link to={`/article/${articleSlug}`}>
+                <Link to={`/article/${encodedSlug}`}>
                   {/* Image */}
                   <div className="relative h-[248px] overflow-hidden bg-gray-200">
                     {imageUrl && (
@@ -110,7 +99,7 @@ const NewsSection = () => {
                     <div className="absolute top-4 left-4">
                       <span 
                         className="text-white px-3 py-1 rounded-full text-xs font-semibold"
-                        style={{ backgroundColor: categoryColor }}
+                        style={{ backgroundColor: article.category?.color || '#EA580C' }}
                       >
                         {categoryName}
                       </span>

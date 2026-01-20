@@ -47,8 +47,9 @@ Toutes les réponses suivent ce format :
 |-----------|------|--------|--------|-------------|
 | `page` | number | Non | `1` | Numéro de page |
 | `limit` | number | Non | `10` | Nombre d'articles par page |
-| `category` | string | Non | - | Slug ou ID de la catégorie |
+| `category` | string | Non | - | Slug ou ID de la catégorie (ex: `passagers-service`) |
 | `search` | string | Non | - | Recherche textuelle |
+| `type` | string | Non | - | `video` pour filtrer uniquement les vidéos |
 
 **Exemple de requête :**
 ```javascript
@@ -110,10 +111,12 @@ GET /api/articles?category=finance&page=1&limit=10&search=ethiopie
 - ✅ Les articles sont triés par `publishedAt` (plus récent en premier), puis par `createdAt`
 - ✅ Si une catégorie n'existe pas, un tableau vide est retourné (pas d'erreur 404)
 - ✅ La recherche est insensible à la casse et cherche dans : `title`, `content`, `excerpt`, `tags`
+- ✅ Le paramètre `type=video` filtre uniquement les articles avec un `videoUrl` non vide
 
 **Gestion des erreurs :**
 - `500` : Erreur serveur
 - `200` : Succès (même si aucun résultat, retourne `data: []`)
+- `404` avec filtre de catégorie : Le frontend utilise automatiquement un fallback côté client (voir section "Solution de Contournement")
 
 ---
 
@@ -690,6 +693,27 @@ Les slugs sont générés automatiquement depuis les titres :
 6. **Tri** : Articles triés par `publishedAt` décroissant (plus récent en premier)
 7. **Recherche** : Insensible à la casse, cherche dans titre, contenu, résumé et tags
 8. **Catégorie inexistante** : Retourne un tableau vide (pas d'erreur 404)
+
+---
+
+## 🔧 Solution de Contournement pour le Filtre de Catégorie
+
+Si le filtre par catégorie (`?category=...`) retourne une erreur 404, le frontend implémente automatiquement un **fallback côté client** :
+
+1. **Récupération de tous les articles** : `GET /api/articles?limit=1000`
+2. **Filtrage côté client** : Filtre les articles par `article.category.slug === categorySlug`
+3. **Application de la pagination** : Applique la pagination sur les résultats filtrés
+
+**Avantages :**
+- ✅ Fonctionne même si le filtre backend a un problème
+- ✅ Permet de continuer à utiliser l'application sans erreur
+- ✅ Transparent pour l'utilisateur
+
+**Inconvénients :**
+- ⚠️ Moins efficace pour de grandes quantités d'articles (charge tous les articles)
+- ⚠️ La pagination côté serveur n'est pas utilisée dans ce cas
+
+**Note :** Cette solution est automatique et transparente. Un avertissement est affiché dans la console pour informer les développeurs.
 
 ---
 

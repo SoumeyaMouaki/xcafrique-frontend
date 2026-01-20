@@ -1,28 +1,16 @@
-import { useEffect, useState } from 'react';
-import API from '../api';
-import { extractApiData } from '../utils/apiHelpers';
+import useArticles from '../hooks/useArticles';
+import LoadingSpinner from './LoadingSpinner';
 
 const ArticlesList = () => {
-  const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { articles, loading, error } = useArticles();
 
-  useEffect(() => {
-    const fetchArticles = async () => {
-      try {
-        const res = await API.get('/articles');
-        const articlesData = extractApiData(res);
-        setArticles(articlesData);
-      } catch (err) {
-        setArticles([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+  if (loading) {
+    return <LoadingSpinner text="Chargement des articles..." />;
+  }
 
-    fetchArticles();
-  }, []);
-
-  if (loading) return <p>Chargement des articles...</p>;
+  if (error) {
+    return <p className="text-red-500">Erreur: {error.message || 'Impossible de charger les articles'}</p>;
+  }
 
   if (articles.length === 0) {
     return <p className="text-gray-500">Aucun article disponible.</p>;

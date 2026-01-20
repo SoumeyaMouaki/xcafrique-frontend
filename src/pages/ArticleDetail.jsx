@@ -2,8 +2,8 @@ import { useParams, Link, useNavigate } from 'react-router-dom'
 import SEO from '../components/SEO'
 import LoadingSpinner from '../components/LoadingSpinner'
 import ErrorMessage from '../components/ErrorMessage'
-import { extractApiItem, handleApiError } from '../utils/apiHelpers'
-import API, { SITE_URL } from '../api'
+import { fetchArticleBySlug } from '../services/articles'
+import { SITE_URL } from '../api'
 import { useState, useEffect } from 'react'
 
 const ArticleDetail = () => {
@@ -14,18 +14,35 @@ const ArticleDetail = () => {
   const [error, setError] = useState(false)
 
   const fetchArticle = async () => {
-    if (!slug) return
+    if (!slug) {
+      console.error('ArticleDetail: Slug manquant dans l\'URL')
+      setError(true)
+      setLoading(false)
+      return
+    }
     
     try {
       setLoading(true)
       setError(false)
-      // L'API utilise le slug, pas l'ID
-      const res = await API.get(`/articles/${slug}`)
-      const articleData = extractApiItem(res)
-      setArticle(articleData)
+      
+      // Décoder le slug de l'URL (React Router le décode automatiquement, mais on s'assure)
+      const decodedSlug = decodeURIComponent(slug)
+      console.log('ArticleDetail: Récupération de l\'article avec slug:', decodedSlug)
+      
+      const result = await fetchArticleBySlug(decodedSlug)
+      
+      if (result.success && result.article) {
+        console.log('ArticleDetail: Article récupéré avec succès:', result.article.title)
+        setArticle(result.article)
+      } else {
+        console.error('ArticleDetail: Erreur lors de la récupération:', result.error)
+        setError(true)
+        setArticle(null)
+      }
     } catch (err) {
-      console.error('Erreur fetch article:', handleApiError(err))
+      console.error('ArticleDetail: Exception lors du fetch:', err)
       setError(true)
+      setArticle(null)
     } finally {
       setLoading(false)
     }
@@ -50,10 +67,18 @@ const ArticleDetail = () => {
     return (
       <div className="container mx-auto px-4 py-12">
         <ErrorMessage 
-          message="Impossible de récupérer l'article. Vérifiez que le backend est démarré et que la configuration CORS est correcte." 
+          message={`Impossible de récupérer l'article avec le slug "${slug}". Vérifiez que le backend est démarré et que l'article existe.`}
           onRetry={fetchArticle}
           isCors={true}
         />
+        <div className="mt-4 text-center">
+          <p className="text-sm text-gray-500 mb-4">
+            Slug utilisé : <code className="bg-gray-100 px-2 py-1 rounded">{slug}</code>
+          </p>
+          <Link to="/" className="btn-primary inline-block">
+            Retour à l'accueil
+          </Link>
+        </div>
       </div>
     )
   }
@@ -117,13 +142,13 @@ const ArticleDetail = () => {
   }
 
   // Gérer l'image (peut être image, featuredImage, etc.)
-  const imageSrc = article.image || article.featuredImage
+  const imageSrc = article?.image || article?.featuredImage
   
-  // Gérer la catégorie
-  const categoryName = article.category?.name || article.category || 'Général'
+  // Gérer la catégorie (avec vérifications supplémentaires)
+  const categoryName = article?.category?.name || article?.category || 'Général'
   
   // Gérer l'auteur
-  const authorName = article.author?.name || article.author || 'Équipe XC Afrique'
+  const authorName = article?.author?.name || article?.author || 'Équipe XC Afrique'
 
   return (
     <article className="container mx-auto px-4 py-8 max-w-4xl">
@@ -158,7 +183,7 @@ const ArticleDetail = () => {
           <div className="absolute top-4 left-4">
             <span 
               className="text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg"
-              style={{ backgroundColor: categoryColor }}
+              style={{ backgroundColor: article.category?.color || '#1E40AF' }}
             >
               {categoryName}
             </span>

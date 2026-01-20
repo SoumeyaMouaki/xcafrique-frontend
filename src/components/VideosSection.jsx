@@ -1,32 +1,20 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import API from '../api'
-import { extractApiData } from '../utils/apiHelpers'
+import useArticles from '../hooks/useArticles'
 import LoadingSpinner from './LoadingSpinner'
 
 /**
  * VideosSection - Carrousel de vidéos interactif
+ * Utilise le paramètre type=video pour récupérer les articles vidéo depuis l'API
  */
 const VideosSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [videos, setVideos] = useState([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchVideos = async () => {
-      try {
-        const res = await API.get('/videos?limit=6')
-        const videosData = extractApiData(res)
-        setVideos(videosData)
-      } catch (err) {
-        setVideos([])
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchVideos()
-  }, [])
+  
+  // Utiliser le hook useArticles avec le filtre type=video
+  const { articles: videos, loading } = useArticles({
+    type: 'video',
+    limit: 6
+  })
 
   const nextVideo = () => {
     if (videos.length > 0) {
@@ -93,7 +81,7 @@ const VideosSection = () => {
             <AnimatePresence mode="wait">
               {visibleVideos.map((video, index) => (
                 <motion.div
-                  key={video.id}
+                  key={video._id || video.id}
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
@@ -101,9 +89,9 @@ const VideosSection = () => {
                   className="relative group cursor-pointer"
                 >
                   <div className="relative h-48 overflow-hidden rounded-lg">
-                    {video.thumbnail && (
+                    {video.featuredImage && (
                       <motion.img
-                        src={video.thumbnail}
+                        src={video.featuredImage}
                         alt={video.title || 'Vidéo'}
                         className="w-full h-full object-cover"
                         whileHover={{ scale: 1.1 }}
@@ -128,18 +116,11 @@ const VideosSection = () => {
                         </svg>
                       </motion.div>
                     </div>
-
-                    {/* Durée */}
-                    {video.duration && (
-                      <div className="absolute bottom-2 right-2 bg-black/70 px-2 py-1 rounded text-sm">
-                        {video.duration}
-                      </div>
-                    )}
                   </div>
 
                   {/* Titre */}
                   <h3 className="mt-4 text-lg font-semibold group-hover:text-accent-orange transition-colors">
-                    {video.title || video.name}
+                    {video.title}
                   </h3>
                 </motion.div>
               ))}

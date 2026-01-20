@@ -1,38 +1,22 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import SEO from '../components/SEO'
-import API from '../api'
-import { extractApiData } from '../utils/apiHelpers'
+import useArticles from '../hooks/useArticles'
 import LoadingSpinner from '../components/LoadingSpinner'
 import ErrorMessage from '../components/ErrorMessage'
 
 /**
  * Page Videos - Page dédiée aux vidéos avec lecteur
+ * Utilise le paramètre type=video pour filtrer les articles vidéo depuis l'API
  */
 const Videos = () => {
   const [selectedVideo, setSelectedVideo] = useState(null)
-  const [videos, setVideos] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
-
-  useEffect(() => {
-    const fetchVideos = async () => {
-      try {
-        setLoading(true)
-        setError(false)
-        const res = await API.get('/videos')
-        const videosData = extractApiData(res)
-        setVideos(videosData)
-      } catch (err) {
-        setError(true)
-        setVideos([])
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchVideos()
-  }, [])
+  
+  // Utiliser le hook useArticles avec le filtre type=video
+  const { articles: videos, loading, error } = useArticles({
+    type: 'video',
+    limit: 50
+  })
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -61,7 +45,7 @@ const Videos = () => {
         {error && (
           <div className="flex justify-center py-12">
             <ErrorMessage 
-              message="Impossible de charger les vidéos" 
+              message={error.message || "Impossible de charger les vidéos"} 
               onRetry={() => window.location.reload()}
             />
           </div>
@@ -83,26 +67,42 @@ const Videos = () => {
           >
             <div className="bg-white rounded-lg shadow-lg overflow-hidden">
               <div className="aspect-video bg-black">
-                <iframe
-                  src={selectedVideo.videoUrl || selectedVideo.url || selectedVideo.embedUrl}
-                  title={selectedVideo.title || selectedVideo.name}
-                  className="w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
+                {selectedVideo.videoUrl ? (
+                  <iframe
+                    src={selectedVideo.videoUrl}
+                    title={selectedVideo.title || 'Vidéo'}
+                    className="w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-white">
+                    <p>URL vidéo non disponible</p>
+                  </div>
+                )}
               </div>
               <div className="p-6">
                 <h2 className="text-2xl font-bold text-primary-dark mb-2">
-                  {selectedVideo.title || selectedVideo.name}
+                  {selectedVideo.title}
                 </h2>
-                <p className="text-gray-600 mb-4">{selectedVideo.description || selectedVideo.excerpt}</p>
+                <p className="text-gray-600 mb-4">{selectedVideo.excerpt || selectedVideo.description}</p>
                 <div className="flex items-center space-x-4 text-sm text-gray-500">
                   {selectedVideo.category && (
-                    <span className="bg-accent-orange text-white px-3 py-1 rounded-full">
+                    <span 
+                      className="text-white px-3 py-1 rounded-full"
+                      style={{ backgroundColor: selectedVideo.category?.color || '#EA580C' }}
+                    >
                       {selectedVideo.category?.name || selectedVideo.category}
                     </span>
                   )}
-                  {selectedVideo.duration && <span>{selectedVideo.duration}</span>}
+                  {selectedVideo.author && (
+                    <span className="flex items-center">
+                      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      {selectedVideo.author}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -114,7 +114,7 @@ const Videos = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {videos.map((video, index) => (
             <motion.div
-              key={video.id}
+              key={video._id || video.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -122,10 +122,10 @@ const Videos = () => {
               onClick={() => setSelectedVideo(video)}
             >
               <div className="relative h-48 overflow-hidden bg-gray-200">
-                {video.thumbnail && (
+                {video.featuredImage && (
                   <img
-                    src={video.thumbnail}
-                    alt={video.title || video.name || 'Vidéo'}
+                    src={video.featuredImage}
+                    alt={video.title || 'Vidéo'}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     onError={(e) => {
                       e.target.style.display = 'none'
@@ -143,11 +143,6 @@ const Videos = () => {
                     </svg>
                   </motion.div>
                 </div>
-                {video.duration && (
-                  <div className="absolute bottom-2 right-2 bg-black/70 px-2 py-1 rounded text-sm text-white">
-                    {video.duration}
-                  </div>
-                )}
                 {video.category && (
                   <div className="absolute top-2 left-2">
                     <span 
@@ -163,10 +158,10 @@ const Videos = () => {
               </div>
               <div className="p-4">
                 <h3 className="text-lg font-semibold text-primary-dark mb-2 group-hover:text-accent-orange transition-colors">
-                  {video.title || video.name}
+                  {video.title}
                 </h3>
                 <p className="text-sm text-gray-600 line-clamp-2">
-                  {video.description || video.excerpt || ''}
+                  {video.excerpt || video.description || ''}
                 </p>
               </div>
             </motion.div>

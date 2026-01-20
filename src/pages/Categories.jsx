@@ -6,7 +6,8 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import ErrorMessage from '../components/ErrorMessage'
 import { extractApiData, handleApiError } from '../utils/apiHelpers'
 import API from '../api'
-import { useState, useEffect } from 'react'
+import useArticles from '../hooks/useArticles'
+import { useState, useEffect, useMemo } from 'react'
 
 /**
  * Page Catégories - Affiche les articles par catégorie ou tous les articles
@@ -14,11 +15,43 @@ import { useState, useEffect } from 'react'
 const Categories = () => {
   const { category } = useParams()
   const decodedCategory = category ? decodeURIComponent(category) : null
-  const [articles, setArticles] = useState([])
   const [allCategories, setAllCategories] = useState([])
-  const [loading, setLoading] = useState(true)
   const [loadingCategories, setLoadingCategories] = useState(true)
-  const [error, setError] = useState(false)
+  
+  // Normaliser un slug (comme le backend)
+  const normalizeSlug = (slug) => {
+    if (!slug) return ''
+    return slug.toString().trim().toLowerCase()
+  }
+  
+  // Trouver le slug de catégorie à utiliser pour l'API (mémorisé)
+  const categorySlug = useMemo(() => {
+    if (!decodedCategory) return undefined
+    
+    const normalizedSlug = normalizeSlug(decodedCategory)
+    const foundCategory = allCategories.find(
+      cat => {
+        const catSlug = normalizeSlug(cat.slug || '')
+        const catName = (cat.name || '').toLowerCase()
+        return catSlug === normalizedSlug || 
+               catName === normalizedSlug ||
+               catSlug === decodedCategory ||
+               (cat.name || cat) === decodedCategory
+      }
+    )
+    
+    if (foundCategory) {
+      return normalizeSlug(foundCategory.slug || foundCategory._id || foundCategory.id)
+    }
+    
+    return normalizedSlug
+  }, [decodedCategory, allCategories])
+  
+  // Utiliser le hook useArticles avec le filtre de catégorie
+  const { articles, loading, error } = useArticles({
+    category: categorySlug,
+    limit: 20
+  })
 
   // Récupérer les catégories
   useEffect(() => {
@@ -36,84 +69,6 @@ const Categories = () => {
     }
     fetchCategories()
   }, [])
-
-  // Normaliser un slug (comme le backend)
-  const normalizeSlug = (slug) => {
-    if (!slug) return ''
-    return slug.toString().trim().toLowerCase()
-  }
-
-  // Fonction pour récupérer les articles (accessible partout)
-  const fetchArticles = async () => {
-    if (loadingCategories) return
-    
-    try {
-      setLoading(true)
-      setError(false)
-      // L'API retourne automatiquement uniquement les articles publiés
-      let url = '/articles'
-      const params = new URLSearchParams()
-      
-      if (decodedCategory) {
-        // Normaliser le slug de la catégorie (comme le backend)
-        const normalizedSlug = normalizeSlug(decodedCategory)
-        
-        // Chercher la catégorie par slug normalisé ou nom
-        const foundCategory = allCategories.find(
-          cat => {
-            const catSlug = normalizeSlug(cat.slug || '')
-            const catName = (cat.name || '').toLowerCase()
-            return catSlug === normalizedSlug || 
-                   catName === normalizedSlug ||
-                   catSlug === decodedCategory ||
-                   (cat.name || cat) === decodedCategory
-          }
-        )
-        
-        if (foundCategory) {
-          // Utiliser le slug de préférence (normalisé comme le backend)
-          const categoryFilter = normalizeSlug(foundCategory.slug || foundCategory._id || foundCategory.id)
-          params.append('category', categoryFilter)
-        } else {
-          // Utiliser directement le slug normalisé (le backend le gère maintenant)
-          params.append('category', normalizedSlug)
-        }
-      }
-      
-      const queryString = params.toString()
-      const finalUrl = queryString ? `${url}?${queryString}` : url
-      
-      const res = await API.get(finalUrl)
-      const articlesData = extractApiData(res)
-      
-      // L'API retourne maintenant toujours 200 avec un tableau vide si pas d'articles
-      // Plus besoin de gérer les erreurs 404 pour les catégories vides
-      setArticles(articlesData)
-      
-      // Afficher le message informatif de l'API si disponible
-      if (res.data?.message && articlesData.length === 0) {
-        console.log('Message API:', res.data.message)
-      }
-    } catch (err) {
-      const apiError = handleApiError(err)
-      // Ne pas afficher d'erreur si c'est juste une catégorie vide (l'API retourne 200 maintenant)
-      // Seulement pour les vraies erreurs réseau/CORS
-      if (apiError.status !== 200 && apiError.status !== 0) {
-        console.error('Erreur récupération articles:', apiError)
-        setError(true)
-      } else {
-        // Catégorie vide ou erreur réseau - afficher tableau vide
-        setArticles([])
-      }
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    fetchArticles()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [decodedCategory, loadingCategories, allCategories])
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -143,12 +98,13 @@ const Categories = () => {
             }
           </p>
 
-          {loading ? (
+          {loading || loadingCategories ? (
             <LoadingSpinner text="Chargement des articles..." />
-          ) : error ? (
+          ) : error && error.status !== 404 ? (
+            // Afficher l'erreur seulement si ce n'est pas une 404 (catégorie vide)
             <ErrorMessage 
-              message="Impossible de charger les articles. Vérifiez que le backend est démarré et que la configuration CORS est correcte." 
-              onRetry={fetchArticles}
+              message={error.message || "Impossible de charger les articles. Vérifiez que le backend est démarré et que la configuration CORS est correcte."} 
+              onRetry={() => window.location.reload()}
               isCors={true}
             />
           ) : articles.length > 0 ? (
@@ -169,7 +125,14 @@ const Categories = () => {
               </p>
               <p className="text-gray-500 text-sm mb-6">
                 {decodedCategory 
-                  ? 'Cette catégorie sera bientôt alimentée avec du contenu.' 
+                  ? (allCategories.length > 0 && !allCategories.find(cat => {
+                      const catSlug = (cat.slug || '').toLowerCase()
+                      const catName = (cat.name || '').toLowerCase()
+                      const searchSlug = (decodedCategory || '').toLowerCase()
+                      return catSlug === searchSlug || catName === searchSlug
+                    })
+                      ? 'Cette catégorie n\'existe pas ou n\'a pas encore d\'articles publiés.'
+                      : 'Cette catégorie sera bientôt alimentée avec du contenu.')
                   : 'Revenez bientôt pour découvrir nos nouveaux articles.'}
               </p>
               {decodedCategory && (

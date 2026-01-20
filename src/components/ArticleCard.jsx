@@ -18,19 +18,27 @@ const ArticleCard = ({ article }) => {
     })
   }
 
+  // Vérifier que l'article existe
+  if (!article) return null
+  
   // Gérer la catégorie (peut être un objet ou une string)
-  const categoryName = article.category?.name || article.category || 'Général'
-  const categoryColor = article.category?.color || '#1E40AF' // Couleur par défaut (primary-dark)
-  const categorySlug = article.category?.slug || ''
+  const categoryName = article?.category?.name || article?.category || 'Général'
+  const categorySlug = article?.category?.slug || ''
   
   // Gérer l'image (peut être image, featuredImage, etc.)
-  const imageUrl = article.image || article.featuredImage
+  const imageUrl = article?.image || article?.featuredImage
   
   // Gérer l'auteur
-  const authorName = article.author?.name || article.author || 'Équipe XC Afrique'
+  const authorName = article?.author?.name || article?.author || 'Équipe XC Afrique'
   
   // Utiliser le slug pour l'URL (selon la documentation API)
-  const articleSlug = article.slug || article._id || article.id
+  const articleSlug = article?.slug || article?._id || article?.id
+  // Encoder le slug pour l'URL (gérer les caractères spéciaux)
+  if (!articleSlug) {
+    console.warn('ArticleCard: Article sans slug valide:', article)
+    return null
+  }
+  const encodedSlug = encodeURIComponent(String(articleSlug))
 
   return (
     <article className="card group animate-fadeIn">
@@ -53,7 +61,7 @@ const ArticleCard = ({ article }) => {
         <div className="absolute top-4 left-4 z-10">
           <span 
             className="text-white px-3 py-1 rounded-full text-xs font-medium shadow-lg backdrop-blur-sm"
-            style={{ backgroundColor: categoryColor }}
+            style={{ backgroundColor: article.category?.color || '#1E40AF' }}
           >
             {categoryName}
           </span>
@@ -96,7 +104,7 @@ const ArticleCard = ({ article }) => {
 
         {/* Bouton Lire plus */}
         <Link
-          to={`/article/${articleSlug}`}
+          to={`/article/${encodedSlug}`}
           className="btn-primary inline-block text-center w-full group/btn"
         >
           <span className="flex items-center justify-center">
