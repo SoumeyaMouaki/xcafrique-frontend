@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import useArticles from '../hooks/useArticles'
 import LoadingSpinner from './LoadingSpinner'
@@ -8,6 +9,7 @@ import LoadingSpinner from './LoadingSpinner'
  * Utilise le paramètre type=video pour récupérer les articles vidéo depuis l'API
  */
 const VideosSection = () => {
+  const navigate = useNavigate()
   const [currentIndex, setCurrentIndex] = useState(0)
   
   // Utiliser le hook useArticles avec le filtre type=video
@@ -15,6 +17,16 @@ const VideosSection = () => {
     type: 'video',
     limit: 6
   })
+
+  const handleVideoClick = (video) => {
+    if (!video) return
+    
+    // Utiliser le slug pour naviguer vers la page de l'article
+    const videoSlug = video.slug || video._id || video.id
+    if (videoSlug) {
+      navigate(`/article/${encodeURIComponent(videoSlug)}`)
+    }
+  }
 
   const nextVideo = () => {
     if (videos.length > 0) {
@@ -79,51 +91,58 @@ const VideosSection = () => {
           {/* Carrousel */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <AnimatePresence mode="wait">
-              {visibleVideos.map((video, index) => (
-                <motion.div
-                  key={video._id || video.id}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                  className="relative group cursor-pointer"
-                >
-                  <div className="relative h-48 overflow-hidden rounded-lg">
-                    {video.featuredImage && (
-                      <motion.img
-                        src={video.featuredImage}
-                        alt={video.title || 'Vidéo'}
-                        className="w-full h-full object-cover"
-                        whileHover={{ scale: 1.1 }}
-                        transition={{ duration: 0.5 }}
-                        onError={(e) => {
-                          e.target.style.display = 'none'
-                        }}
-                      />
-                    )}
-                    {/* Overlay sombre */}
-                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors"></div>
-                    
-                    {/* Bouton Play */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <motion.div
-                        whileHover={{ scale: 1.2 }}
-                        whileTap={{ scale: 0.9 }}
-                        className="bg-accent-orange rounded-full p-4"
-                      >
-                        <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                      </motion.div>
+              {visibleVideos.map((video, index) => {
+                if (!video) return null
+                
+                const videoSlug = video.slug || video._id || video.id
+                
+                return (
+                  <motion.div
+                    key={video._id || video.id}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    className="relative group cursor-pointer"
+                    onClick={() => handleVideoClick(video)}
+                  >
+                    <div className="relative h-48 overflow-hidden rounded-lg">
+                      {video.featuredImage && (
+                        <motion.img
+                          src={video.featuredImage}
+                          alt={video.title || 'Vidéo'}
+                          className="w-full h-full object-cover"
+                          whileHover={{ scale: 1.1 }}
+                          transition={{ duration: 0.5 }}
+                          onError={(e) => {
+                            e.target.style.display = 'none'
+                          }}
+                        />
+                      )}
+                      {/* Overlay sombre */}
+                      <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors"></div>
+                      
+                      {/* Bouton Play */}
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <motion.div
+                          whileHover={{ scale: 1.2 }}
+                          whileTap={{ scale: 0.9 }}
+                          className="bg-accent-orange rounded-full p-4"
+                        >
+                          <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                        </motion.div>
+                      </div>
                     </div>
-                  </div>
 
-                  {/* Titre */}
-                  <h3 className="mt-4 text-lg font-semibold group-hover:text-accent-orange transition-colors">
-                    {video.title}
-                  </h3>
-                </motion.div>
-              ))}
+                    {/* Titre */}
+                    <h3 className="mt-4 text-lg font-semibold group-hover:text-accent-orange transition-colors">
+                      {video.title}
+                    </h3>
+                  </motion.div>
+                )
+              })}
             </AnimatePresence>
           </div>
 
