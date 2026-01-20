@@ -21,10 +21,10 @@ const VideosSection = () => {
   const handleVideoClick = (video) => {
     if (!video) return
     
-    // Utiliser le slug pour naviguer vers la page de l'article
+    // Naviguer vers la page Videos avec le slug de la vidéo en paramètre
     const videoSlug = video.slug || video._id || video.id
     if (videoSlug) {
-      navigate(`/article/${encodeURIComponent(videoSlug)}`)
+      navigate(`/videos?video=${encodeURIComponent(videoSlug)}`)
     }
   }
 
