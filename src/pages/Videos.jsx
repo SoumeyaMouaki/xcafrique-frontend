@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import SEO from '../components/SEO'
 import useArticles from '../hooks/useArticles'
@@ -10,6 +11,7 @@ import ErrorMessage from '../components/ErrorMessage'
  * Utilise le paramètre type=video pour filtrer les articles vidéo depuis l'API
  */
 const Videos = () => {
+  const [searchParams] = useSearchParams()
   const [selectedVideo, setSelectedVideo] = useState(null)
   
   // Utiliser le hook useArticles avec le filtre type=video
@@ -17,6 +19,29 @@ const Videos = () => {
     type: 'video',
     limit: 50
   })
+
+  // Sélectionner automatiquement la vidéo depuis l'URL si présente
+  useEffect(() => {
+    const videoParam = searchParams.get('video')
+    if (videoParam && videos.length > 0 && !selectedVideo) {
+      // Trouver la vidéo correspondante au paramètre
+      const video = videos.find(
+        v => (v.slug && v.slug === videoParam) || 
+             (v._id && v._id === videoParam) || 
+             (v.id && v.id === videoParam)
+      )
+      if (video) {
+        setSelectedVideo(video)
+        // Scroll vers le lecteur vidéo
+        setTimeout(() => {
+          const videoPlayer = document.querySelector('.aspect-video')
+          if (videoPlayer) {
+            videoPlayer.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          }
+        }, 100)
+      }
+    }
+  }, [searchParams, videos, selectedVideo])
 
   return (
     <div className="min-h-screen bg-gray-50">
