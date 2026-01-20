@@ -189,7 +189,6 @@ const Header = () => {
   const navLinks = [
     { to: '/', label: 'Home' },
     { to: '/categories', label: 'News' },
-    { to: '/categories', label: 'Categories' },
     { to: '/videos', label: 'Videos' },
     { to: '/about', label: 'About' },
     { to: '/contact', label: 'Contact' },
@@ -213,9 +212,9 @@ const Header = () => {
 
           {/* Navigation desktop */}
           <nav className="hidden lg:flex items-center space-x-8">
-            {navLinks.map((link) => (
+            {navLinks.map((link, index) => (
               <Link
-                key={link.to}
+                key={`${link.to}-${index}`}
                 to={link.to}
                 className="text-white hover:text-accent-orange transition-colors duration-200 font-medium relative group"
               >
@@ -402,7 +401,7 @@ const Header = () => {
               <div className="py-4 space-y-2">
                 {navLinks.map((link, index) => (
                   <motion.div
-                    key={link.to}
+                    key={`${link.to}-${index}`}
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: index * 0.1 }}

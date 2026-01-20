@@ -17,7 +17,6 @@ const Footer = () => {
   const quickLinks = [
     { to: '/', label: 'Home' },
     { to: '/categories', label: 'News' },
-    { to: '/categories', label: 'Categories' },
     { to: '/videos', label: 'Videos' },
     { to: '/about', label: 'About' },
     { to: '/contact', label: 'Contact' },
@@ -67,8 +66,8 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
-              {quickLinks.map((link) => (
-                <li key={link.to}>
+              {quickLinks.map((link, index) => (
+                <li key={`${link.to}-${index}`}>
                   <Link
                     to={link.to}
                     className="text-gray-300 hover:text-accent-orange transition-colors duration-200"
