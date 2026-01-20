@@ -67,14 +67,29 @@ const Videos = () => {
           >
             <div className="bg-white rounded-lg shadow-lg overflow-hidden">
               <div className="aspect-video bg-black">
-                {selectedVideo.videoUrl ? (
-                  <iframe
-                    src={selectedVideo.videoUrl}
-                    title={selectedVideo.title || 'Vidéo'}
-                    className="w-full h-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
+                {selectedVideo.videoEmbedUrl ? (
+                  <div className="video-container" style={{
+                    position: 'relative',
+                    paddingBottom: '56.25%',
+                    height: 0,
+                    overflow: 'hidden',
+                    maxWidth: '100%'
+                  }}>
+                    <iframe
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%'
+                      }}
+                      src={selectedVideo.videoEmbedUrl}
+                      title={selectedVideo.title || 'Vidéo'}
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-white">
                     <p>URL vidéo non disponible</p>

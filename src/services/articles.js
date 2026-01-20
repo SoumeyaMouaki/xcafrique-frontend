@@ -45,8 +45,9 @@ const filterArticlesByType = (articles, type) => {
   if (!type || type !== 'video') return articles
   
   return articles.filter(article => {
-    // Un article vidéo a un videoUrl non vide
-    return article.videoUrl && article.videoUrl.trim() !== ''
+    // Un article vidéo a un videoEmbedUrl non vide (ou videoUrl pour compatibilité)
+    return (article.videoEmbedUrl && article.videoEmbedUrl.trim() !== '') ||
+           (article.videoUrl && article.videoUrl.trim() !== '')
   })
 }
 
