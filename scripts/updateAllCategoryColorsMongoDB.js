@@ -53,3 +53,4 @@ db.categories.find({}).forEach(cat => {
   print(`${status} ${cat.name}: ${cat.color || 'Pas de couleur'} ${expectedColor ? `(attendu: ${expectedColor})` : ''}`)
 })
 
+
