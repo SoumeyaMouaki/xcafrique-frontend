@@ -52,15 +52,9 @@ const About = () => {
               Soumeya Mouaki Benani Benani
             </h2>
             <p className="text-lg font-semibold text-primary-dark mb-2">
-              Fondatrice & CEO de XCAfrique
+              Fondatrice de XCAfrique
             </p>
-            <h3 className="text-lg text-accent-gray mb-4">
-              Journaliste & consultante en communication spécialisée dans le secteur aérien
-            </h3>
-            <div className="prose max-w-none">
-              <p className="text-gray-700 mb-4">
-                Soumeya Mouaki Benani Benani est journaliste et consultante en communication spécialisée dans le secteur aérien, avec un parcours unique mêlant pratique opérationnelle, expertise médiatique et analyse stratégique.
-              </p>
+             
               <p className="text-gray-700 mb-4">
                 Diplômée d'un master en communication et relations publiques, elle a travaillé plusieurs années comme Personnel Navigant Commercial, une expérience qui lui a offert une connaissance concrète des opérations aériennes, de la sûreté et des réalités internes du transport aérien.
               </p>
@@ -72,7 +66,6 @@ const About = () => {
               </p>
             </div>
           </div>
-        </div>
       </section>
 
       {/* Section Valeurs */}
