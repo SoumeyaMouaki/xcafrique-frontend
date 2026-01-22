@@ -16,7 +16,7 @@ const Footer = () => {
 
   const quickLinks = [
     { to: '/', label: 'Home' },
-    { to: '/categories', label: 'Rubriques' },
+    { to: '/categories', label: 'Categories' },
     { to: '/videos', label: 'Videos' },
     { to: '/about', label: 'About' },
     { to: '/contact', label: 'Contact' },
@@ -79,9 +79,9 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Colonne 3 - Rubriques */}
+          {/* Colonne 3 - Categories */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Rubriques</h3>
+            <h3 className="text-lg font-semibold mb-4">Categories</h3>
             <ul className="space-y-2">
               {categories.map((category) => (
                 <li key={category.to}>

@@ -50,7 +50,7 @@ const CategoryList = ({ categories: propCategories = null }) => {
     return (
       <div className="bg-gray-50 rounded-lg p-6">
         <h2 className="text-2xl font-semibold mb-4 text-primary-dark">
-          Rubriques
+          Catégories
         </h2>
         <p className="text-red-600 text-sm">Erreur de chargement</p>
       </div>
@@ -150,7 +150,7 @@ const CategoryList = ({ categories: propCategories = null }) => {
   return (
     <div className="bg-gray-50 rounded-lg p-6">
       <h2 className="text-2xl font-semibold mb-4 text-primary-dark">
-        Rubriques
+        Catégories
       </h2>
       <ul className="space-y-2">
         <li>
@@ -161,7 +161,7 @@ const CategoryList = ({ categories: propCategories = null }) => {
             <svg className="w-5 h-5 mr-2 text-primary-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
             </svg>
-            Toutes les rubriques
+            Toutes les catégories
           </Link>
         </li>
         {categories.length > 0 ? (
@@ -201,7 +201,7 @@ const CategoryList = ({ categories: propCategories = null }) => {
               )
             })
         ) : (
-          <li className="text-gray-500 text-sm py-2">Aucune rubrique disponible</li>
+          <li className="text-gray-500 text-sm py-2">Aucune catégorie disponible</li>
         )}
       </ul>
     </div>
