@@ -72,10 +72,10 @@ const Search = () => {
             Aucun résultat trouvé pour "<span className="font-semibold">{query}</span>"
           </p>
           <p className="text-gray-500 mb-6">
-            Essayez avec d'autres mots-clés ou consultez toutes nos catégories
+            Essayez avec d'autres mots-clés ou consultez toutes nos rubriques
           </p>
           <Link to="/categories" className="btn-primary inline-block">
-            Voir toutes les catégories
+            Voir toutes les rubriques
           </Link>
         </div>
       )}

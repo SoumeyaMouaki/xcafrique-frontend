@@ -73,15 +73,15 @@ const Categories = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <SEO
-        title={decodedCategory ? `${decodedCategory} - XCAfrique` : "Catégories - XCAfrique"}
+        title={decodedCategory ? `${decodedCategory} - XCAfrique` : "Rubriques - XCAfrique"}
         description={decodedCategory 
-          ? `Articles dans la catégorie ${decodedCategory} sur l'actualité aéronautique africaine`
-          : "Découvrez tous nos articles sur l'actualité aéronautique africaine par catégorie"
+          ? `Articles dans la rubrique ${decodedCategory} sur l'actualité aéronautique africaine`
+          : "Découvrez tous nos articles sur l'actualité aéronautique africaine par rubrique"
         }
-        keywords={decodedCategory ? `${decodedCategory}, aviation, Afrique` : "aviation, Afrique, catégories"}
+        keywords={decodedCategory ? `${decodedCategory}, aviation, Afrique` : "aviation, Afrique, rubriques"}
       />
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* Sidebar avec liste des catégories */}
+        {/* Sidebar avec liste des rubriques */}
         <aside className="lg:col-span-1">
           <CategoryList categories={allCategories} />
         </aside>
@@ -89,11 +89,11 @@ const Categories = () => {
         {/* Contenu principal */}
         <main className="lg:col-span-3">
           <h1 className="text-4xl font-bold text-primary-dark mb-2">
-            {decodedCategory ? decodedCategory : 'Toutes les catégories'}
+            {decodedCategory ? decodedCategory : 'Toutes les rubriques'}
           </h1>
           <p className="text-gray-600 mb-8">
             {decodedCategory 
-              ? `Articles dans la catégorie "${decodedCategory}"`
+              ? `Articles dans la rubrique "${decodedCategory}"`
               : 'Découvrez tous nos articles sur l\'actualité aéronautique africaine'
             }
           </p>
@@ -120,7 +120,7 @@ const Categories = () => {
               </svg>
               <p className="text-gray-600 text-lg mb-4">
                 {decodedCategory 
-                  ? `Aucun article trouvé dans la catégorie "${decodedCategory}".` 
+                  ? `Aucun article trouvé dans la rubrique "${decodedCategory}".` 
                   : 'Aucun article disponible pour le moment.'}
               </p>
               <p className="text-gray-500 text-sm mb-6">
@@ -131,13 +131,13 @@ const Categories = () => {
                       const searchSlug = (decodedCategory || '').toLowerCase()
                       return catSlug === searchSlug || catName === searchSlug
                     })
-                      ? 'Cette catégorie n\'existe pas ou n\'a pas encore d\'articles publiés.'
-                      : 'Cette catégorie sera bientôt alimentée avec du contenu.')
+                      ? 'Cette rubrique n\'existe pas ou n\'a pas encore d\'articles publiés.'
+                      : 'Cette rubrique sera bientôt alimentée avec du contenu.')
                   : 'Revenez bientôt pour découvrir nos nouveaux articles.'}
               </p>
               {decodedCategory && (
                 <Link to="/categories" className="btn-primary inline-block">
-                  Voir toutes les catégories
+                  Voir toutes les rubriques
                 </Link>
               )}
             </div>

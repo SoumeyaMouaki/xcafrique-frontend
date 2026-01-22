@@ -188,7 +188,7 @@ const Header = () => {
 
   const navLinks = [
     { to: '/', label: 'Home' },
-    { to: '/categories', label: 'Categories' },
+    { to: '/categories', label: 'Rubriques' },
     { to: '/videos', label: 'Videos' },
     { to: '/about', label: 'About' },
     { to: '/contact', label: 'Contact' },
