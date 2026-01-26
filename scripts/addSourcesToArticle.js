@@ -13,7 +13,16 @@
 
 import { MongoClient } from 'mongodb'
 
-const MONGODB_URI = process.env.MONGODB_URI_PROD || 'mongodb+srv://dawini-user:2005Xad5@cluster0.kcwr1dx.mongodb.net/XCAfrique'
+const MONGODB_URI = process.env.MONGODB_URI_PROD
+
+if (!MONGODB_URI) {
+  console.error('❌ Erreur: La variable d\'environnement MONGODB_URI_PROD est requise')
+  console.error('   Définissez-la avant d\'exécuter le script:')
+  console.error('   export MONGODB_URI_PROD="mongodb+srv://..."')
+  console.error('   ou sur Windows:')
+  console.error('   set MONGODB_URI_PROD="mongodb+srv://..."')
+  process.exit(1)
+}
 
 async function addSourcesToArticle() {
   const args = process.argv.slice(2)

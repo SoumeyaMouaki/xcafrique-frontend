@@ -5,7 +5,9 @@
  */
 
 // Se connecter à MongoDB
-// mongosh "mongodb+srv://dawini-user:2005Xad5@cluster0.kcwr1dx.mongodb.net/XCAfrique"
+// ⚠️  IMPORTANT: Ne jamais hardcoder les credentials MongoDB dans le code
+// Utilisez une variable d'environnement ou MongoDB Compass avec votre connexion configurée
+// Exemple: mongosh "$MONGODB_URI_PROD"
 
 // Mettre à jour toutes les couleurs en une seule fois
 const categoryColors = {
