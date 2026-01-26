@@ -93,7 +93,7 @@ const Contact = () => {
                 </svg>
               </a>
               <a
-                href="https://linkedin.com/company/xcafrique"
+                href="https://www.linkedin.com/in/soumeya-mouaki-benani-benani-7315b2398"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary-dark hover:text-accent-orange transition-colors"
