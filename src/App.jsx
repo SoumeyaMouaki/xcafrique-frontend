@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/react'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import NotificationContainer from './components/NotificationContainer'
+import GoogleAnalytics from './components/GoogleAnalytics'
 import Home from './pages/Home'
 import Categories from './pages/Categories'
 import ArticleDetail from './pages/ArticleDetail'
@@ -48,6 +49,8 @@ function App() {
 
   return (
     <Router>
+      {/* Google Analytics - Suivi des changements de route */}
+      <GoogleAnalytics />
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-grow">
