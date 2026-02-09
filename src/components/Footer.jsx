@@ -1,10 +1,15 @@
 import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import API from '../api'
+import { extractApiData, handleApiError } from '../utils/apiHelpers'
 
 /**
  * Footer - Pied de page complet en 3 colonnes
  */
 const Footer = () => {
   const currentYear = new Date().getFullYear()
+  const [categories, setCategories] = useState([])
+  const [loadingCategories, setLoadingCategories] = useState(true)
 
   const socialLinks = [
     { name: 'Facebook', icon: 'M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z', href: 'https://facebook.com' },
@@ -22,13 +27,33 @@ const Footer = () => {
     { to: '/contact', label: 'Contact' },
   ]
 
-  const categories = [
-    { to: '/categories/Commercial Aviation', label: 'Commercial Aviation' },
-    { to: '/categories/Cargo', label: 'Cargo' },
-    { to: '/categories/Airports', label: 'Airports' },
-    { to: '/categories/Safety', label: 'Safety' },
-    { to: '/categories/Technology', label: 'Technology' },
-  ]
+  // Récupérer les catégories depuis l'API
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setLoadingCategories(true)
+        const res = await API.get('/categories')
+        const cats = extractApiData(res)
+        // Filtrer uniquement les catégories actives et les trier par nom
+        const activeCategories = cats
+          .filter(cat => cat.isActive !== false)
+          .sort((a, b) => {
+            const nameA = (a.name || '').toLowerCase()
+            const nameB = (b.name || '').toLowerCase()
+            return nameA.localeCompare(nameB, 'fr')
+          })
+        setCategories(activeCategories)
+      } catch (err) {
+        console.error('Erreur récupération catégories footer:', handleApiError(err))
+        // En cas d'erreur, garder un tableau vide
+        setCategories([])
+      } finally {
+        setLoadingCategories(false)
+      }
+    }
+
+    fetchCategories()
+  }, [])
 
   return (
     <footer className="bg-primary-dark text-white">
@@ -82,18 +107,32 @@ const Footer = () => {
           {/* Colonne 3 - Categories */}
           <div>
             <h3 className="text-lg font-semibold mb-4">Categories</h3>
-            <ul className="space-y-2">
-              {categories.map((category) => (
-                <li key={category.to}>
-                  <Link
-                    to={category.to}
-                    className="text-gray-300 hover:text-accent-orange transition-colors duration-200"
-                  >
-                    {category.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            {loadingCategories ? (
+              <p className="text-gray-300 text-sm">Chargement...</p>
+            ) : categories.length > 0 ? (
+              <ul className="space-y-2">
+                {categories.map((category) => {
+                  const categoryName = category.name || category
+                  const categorySlug = category.slug 
+                    ? category.slug.trim().toLowerCase() 
+                    : (categoryName || '').trim().toLowerCase().replace(/\s+/g, '-')
+                  const categoryId = category._id || category.id || categorySlug
+                  
+                  return (
+                    <li key={categoryId}>
+                      <Link
+                        to={`/categories/${encodeURIComponent(categorySlug)}`}
+                        className="text-gray-300 hover:text-accent-orange transition-colors duration-200"
+                      >
+                        {categoryName}
+                      </Link>
+                    </li>
+                  )
+                })}
+              </ul>
+            ) : (
+              <p className="text-gray-300 text-sm">Aucune catégorie disponible</p>
+            )}
           </div>
         </div>
 

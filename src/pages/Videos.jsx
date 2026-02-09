@@ -37,7 +37,7 @@ const Videos = () => {
           const videoPlayer = document.querySelector('.aspect-video')
           if (videoPlayer) {
             videoPlayer.scrollIntoView({ behavior: 'smooth', block: 'start' })
-          }
+      }
         }, 100)
       }
     }
@@ -100,7 +100,7 @@ const Videos = () => {
                     overflow: 'hidden',
                     maxWidth: '100%'
                   }}>
-                    <iframe
+                <iframe
                       style={{
                         position: 'absolute',
                         top: 0,
@@ -111,8 +111,8 @@ const Videos = () => {
                       src={selectedVideo.videoEmbedUrl}
                       title={selectedVideo.title || 'Vidéo'}
                       frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
                     />
                   </div>
                 ) : (

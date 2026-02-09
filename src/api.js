@@ -16,13 +16,13 @@ const getApiBaseUrl = () => {
   
   // En production (déployé), utiliser l'URL du backend déployé
   // Priorité : VITE_API_URL depuis les variables d'environnement Vercel
-  const baseUrl = import.meta.env.VITE_API_URL || 'https://xcafrique-backend.vercel.app'
+    const baseUrl = import.meta.env.VITE_API_URL || 'https://xcafrique-backend.vercel.app'
   
-  // Nettoyer l'URL si elle contient déjà /api
-  const cleanUrl = baseUrl.replace(/\/api\/?$/, '')
+    // Nettoyer l'URL si elle contient déjà /api
+    const cleanUrl = baseUrl.replace(/\/api\/?$/, '')
   
-  // Ajouter /api à la fin
-  return `${cleanUrl}/api`
+    // Ajouter /api à la fin
+    return `${cleanUrl}/api`
 }
 
 const API_BASE_URL = getApiBaseUrl()

@@ -5,6 +5,7 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import NotificationContainer from './components/NotificationContainer'
 import GoogleAnalytics from './components/GoogleAnalytics'
+import ScrollToTop from './components/ScrollToTop'
 import Home from './pages/Home'
 import Categories from './pages/Categories'
 import ArticleDetail from './pages/ArticleDetail'
@@ -49,6 +50,8 @@ function App() {
 
   return (
     <Router>
+      {/* Scroll to top lors de la navigation */}
+      <ScrollToTop />
       {/* Google Analytics - Suivi des changements de route */}
       <GoogleAnalytics />
       <div className="min-h-screen flex flex-col">

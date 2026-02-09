@@ -2,8 +2,8 @@ import { useParams, Link, useNavigate } from 'react-router-dom'
 import SEO from '../components/SEO'
 import LoadingSpinner from '../components/LoadingSpinner'
 import ErrorMessage from '../components/ErrorMessage'
+import ShareButtons from '../components/ShareButtons'
 import { fetchArticleBySlug } from '../services/articles'
-import { SITE_URL } from '../api'
 import { useState, useEffect } from 'react'
 
 const ArticleDetail = () => {
@@ -115,30 +115,12 @@ const ArticleDetail = () => {
     })
   }
 
-  // Partage — safe because we returned early if no article
-  const shareOnTwitter = () => {
-    const url = `${SITE_URL}${window.location.pathname}`
-    const text = article.title || 'XC Afrique'
-    window.open(
-      `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
-      '_blank'
-    )
-  }
-
-  const shareOnFacebook = () => {
-    const url = `${SITE_URL}${window.location.pathname}`
-    window.open(
-      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
-      '_blank'
-    )
-  }
-
-  const shareOnLinkedIn = () => {
-    const url = `${SITE_URL}${window.location.pathname}`
-    window.open(
-      `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
-      '_blank'
-    )
+  // Callback pour mettre à jour le compteur de partages après un partage
+  const handleShareUpdate = (newShareCount) => {
+    setArticle(prev => ({
+      ...prev,
+      shareCount: newShareCount
+    }))
   }
 
   // Gérer l'image (peut être image, featuredImage, etc.)
@@ -266,45 +248,8 @@ const ArticleDetail = () => {
         </div>
       )}
 
-      {/* Partage & navigation */}
-      <div className="border-t border-gray-200 pt-8 mt-8">
-        <h3 className="text-lg font-semibold text-primary-dark mb-4">
-          Partager cet article
-        </h3>
-        <div className="flex flex-wrap gap-4">
-          <button
-            onClick={shareOnTwitter}
-            className="flex items-center space-x-2 px-4 py-2 bg-blue-400 text-white rounded-lg hover:bg-blue-500 transition-colors shadow-md hover:shadow-lg"
-            aria-label="Partager sur Twitter"
-          >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z" />
-            </svg>
-            <span>Twitter</span>
-          </button>
-          <button
-            onClick={shareOnFacebook}
-            className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
-            aria-label="Partager sur Facebook"
-          >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
-            </svg>
-            <span>Facebook</span>
-          </button>
-          <button
-            onClick={shareOnLinkedIn}
-            className="flex items-center space-x-2 px-4 py-2 bg-blue-800 text-white rounded-lg hover:bg-blue-900 transition-colors shadow-md hover:shadow-lg"
-            aria-label="Partager sur LinkedIn"
-          >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z" />
-              <circle cx="4" cy="4" r="2" />
-            </svg>
-            <span>LinkedIn</span>
-          </button>
-        </div>
-      </div>
+      {/* Partage */}
+      <ShareButtons article={article} onShareUpdate={handleShareUpdate} />
 
       {article.category && article.category.slug && (
         <div className="mt-12 pt-8 border-t border-gray-200">

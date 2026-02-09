@@ -184,3 +184,50 @@ export const fetchArticleBySlug = async (slug) => {
   }
 }
 
+/**
+ * Enregistre un partage d'article
+ * @param {string} slug - Slug de l'article
+ * @param {string} platform - Plateforme de partage ('facebook', 'twitter', 'linkedin', 'whatsapp', 'email', 'copy', 'other')
+ * @returns {Promise<Object>} { success, data: { shareCount }, error }
+ */
+export const shareArticle = async (slug, platform = 'other') => {
+  if (!slug) {
+    return {
+      success: false,
+      data: null,
+      error: { message: 'Slug requis' }
+    }
+  }
+
+  try {
+    const encodedSlug = encodeURIComponent(slug)
+    const response = await API.post(`/articles/${encodedSlug}/share`, {
+      platform
+    })
+
+    // La réponse devrait être au format { success: true, data: { shareCount: number } }
+    if (response.data && response.data.success) {
+      return {
+        success: true,
+        data: response.data.data || { shareCount: response.data.shareCount },
+        error: null
+      }
+    }
+
+    return {
+      success: true,
+      data: { shareCount: response.data.shareCount || 0 },
+      error: null
+    }
+  } catch (err) {
+    const apiError = handleApiError(err)
+    console.error('shareArticle: Erreur API:', apiError)
+    // Ne pas bloquer l'utilisateur même si l'enregistrement échoue
+    return {
+      success: false,
+      data: null,
+      error: apiError
+    }
+  }
+}
+
