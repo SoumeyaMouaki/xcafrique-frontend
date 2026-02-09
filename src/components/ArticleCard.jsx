@@ -85,7 +85,7 @@ const ArticleCard = ({ article }) => {
       <div className="p-6">
         <h2 className={`text-xl font-semibold mb-2 line-clamp-2 transition-colors flex items-start gap-2 ${
           articleIsRead 
-            ? 'text-gray-500 line-through group-hover:text-gray-600' 
+            ? 'text-gray-500 group-hover:text-gray-600' 
             : 'text-primary-dark group-hover:text-accent-orange'
         }`}>
           {articleIsRead && (

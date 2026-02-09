@@ -124,7 +124,7 @@ const NewsSection = () => {
                     {/* Titre */}
                     <h3 className={`text-xl font-semibold mb-3 transition-colors duration-200 flex items-start gap-2 ${
                       articleIsRead 
-                        ? 'text-gray-500 line-through group-hover:text-gray-600' 
+                        ? 'text-gray-500 group-hover:text-gray-600' 
                         : 'text-primary-dark group-hover:text-accent-orange'
                     }`}>
                       {articleIsRead && (
