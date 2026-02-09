@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import useReadArticles from '../hooks/useReadArticles'
 
 /**
  * Composant ArticleCard - Carte d'affichage d'un article
@@ -7,6 +8,7 @@ import { Link } from 'react-router-dom'
  * @param {Object} article - L'objet article à afficher
  */
 const ArticleCard = ({ article }) => {
+  const { isRead } = useReadArticles()
   const formatDate = (dateString) => {
     if (!dateString) return ''
     const date = new Date(dateString)
@@ -39,6 +41,9 @@ const ArticleCard = ({ article }) => {
     return null
   }
   const encodedSlug = encodeURIComponent(String(articleSlug))
+  
+  // Vérifier si l'article a été lu
+  const articleIsRead = isRead(articleSlug)
 
   return (
     <article className="card group animate-fadeIn">
@@ -78,8 +83,23 @@ const ArticleCard = ({ article }) => {
 
       {/* Contenu de la carte */}
       <div className="p-6">
-        <h2 className="text-xl font-semibold mb-2 text-primary-dark line-clamp-2 group-hover:text-accent-orange transition-colors">
-          {article.title}
+        <h2 className={`text-xl font-semibold mb-2 line-clamp-2 transition-colors flex items-start gap-2 ${
+          articleIsRead 
+            ? 'text-gray-500 line-through group-hover:text-gray-600' 
+            : 'text-primary-dark group-hover:text-accent-orange'
+        }`}>
+          {articleIsRead && (
+            <svg 
+              className="w-5 h-5 mt-0.5 text-green-600 flex-shrink-0" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+              aria-label="Article lu"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          )}
+          <span>{article.title}</span>
         </h2>
         
         <p className="text-gray-600 text-sm mb-4 line-clamp-3">

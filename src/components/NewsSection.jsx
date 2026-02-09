@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import useArticles from '../hooks/useArticles'
+import useReadArticles from '../hooks/useReadArticles'
 import LoadingSpinner from './LoadingSpinner'
 import ErrorMessage from './ErrorMessage'
 
@@ -9,6 +10,7 @@ import ErrorMessage from './ErrorMessage'
  */
 const NewsSection = () => {
   const { articles, loading, error } = useArticles({ limit: 6, page: 1 })
+  const { isRead } = useReadArticles()
 
   if (loading) {
     return (
@@ -69,6 +71,9 @@ const NewsSection = () => {
               return null
             }
             const encodedSlug = encodeURIComponent(String(articleSlug))
+            
+            // Vérifier si l'article a été lu
+            const articleIsRead = isRead(articleSlug)
 
             return (
               <motion.article
@@ -117,8 +122,23 @@ const NewsSection = () => {
                     </div>
 
                     {/* Titre */}
-                    <h3 className="text-xl font-semibold text-primary-dark mb-3 group-hover:text-accent-orange transition-colors duration-200">
-                      {article.title}
+                    <h3 className={`text-xl font-semibold mb-3 transition-colors duration-200 flex items-start gap-2 ${
+                      articleIsRead 
+                        ? 'text-gray-500 line-through group-hover:text-gray-600' 
+                        : 'text-primary-dark group-hover:text-accent-orange'
+                    }`}>
+                      {articleIsRead && (
+                        <svg 
+                          className="w-5 h-5 mt-0.5 text-green-600 flex-shrink-0" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          viewBox="0 0 24 24"
+                          aria-label="Article lu"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      )}
+                      <span>{article.title}</span>
                     </h3>
 
                     {/* Description */}

@@ -4,6 +4,7 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import ErrorMessage from '../components/ErrorMessage'
 import ShareButtons from '../components/ShareButtons'
 import { fetchArticleBySlug } from '../services/articles'
+import useReadArticles from '../hooks/useReadArticles'
 import { useState, useEffect } from 'react'
 
 const ArticleDetail = () => {
@@ -12,6 +13,7 @@ const ArticleDetail = () => {
   const [article, setArticle] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
+  const { markAsRead } = useReadArticles()
 
   const fetchArticle = async () => {
     if (!slug) {
@@ -34,6 +36,9 @@ const ArticleDetail = () => {
       if (result.success && result.article) {
         console.log('ArticleDetail: Article récupéré avec succès:', result.article.title)
         setArticle(result.article)
+        // Marquer l'article comme lu
+        const articleSlug = result.article.slug || decodedSlug
+        markAsRead(articleSlug)
       } else {
         console.error('ArticleDetail: Erreur lors de la récupération:', result.error)
         setError(true)
