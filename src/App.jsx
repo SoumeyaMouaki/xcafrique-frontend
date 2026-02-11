@@ -72,9 +72,9 @@ function App() {
         <Footer />
         {/* Container de notifications en temps réel */}
         <NotificationContainer />
+        {/* Vercel Web Analytics */}
+        <Analytics />
       </div>
-      {/* Vercel Analytics */}
-      <Analytics />
     </Router>
   )
 }
