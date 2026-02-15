@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import API from '../api'
-import LanguageSwitcher from './LanguageSwitcher'
+// import LanguageSwitcher from './LanguageSwitcher' // Masqué temporairement
 
 /**
  * Header - En-tête sticky avec logo, navigation, recherche et menu mobile
@@ -229,8 +229,8 @@ const Header = () => {
 
           {/* Search and Mobile Menu */}
           <div className="flex items-center space-x-4">
-            {/* Language Switcher */}
-            <LanguageSwitcher />
+            {/* Language Switcher - Masqué temporairement */}
+            {/* <LanguageSwitcher /> */}
             
             {/* Search Icon */}
             <button
