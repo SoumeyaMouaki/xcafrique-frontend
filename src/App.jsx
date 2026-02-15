@@ -5,6 +5,7 @@ import { Analytics } from '@vercel/analytics/react'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import NotificationContainer from './components/NotificationContainer'
+import CookieBanner from './components/CookieBanner'
 import GoogleAnalytics from './components/GoogleAnalytics'
 import ScrollToTop from './components/ScrollToTop'
 import Home from './pages/Home'
@@ -15,6 +16,7 @@ import Search from './pages/Search'
 import About from './pages/About'
 import Contact from './pages/Contact'
 import Follow from './pages/Follow'
+import Privacy from './pages/Privacy'
 
 /**
  * Composant principal de l'application
@@ -75,11 +77,14 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/follow" element={<Follow />} />
+            <Route path="/privacy" element={<Privacy />} />
           </Routes>
         </main>
         <Footer />
         {/* Container de notifications en temps réel */}
         <NotificationContainer />
+        {/* Bannière de consentement aux cookies */}
+        <CookieBanner />
       </div>
       {/* Vercel Analytics */}
       <Analytics />

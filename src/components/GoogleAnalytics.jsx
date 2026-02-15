@@ -9,12 +9,20 @@ function GoogleAnalytics() {
   const location = useLocation()
 
   useEffect(() => {
-    // Vérifier que gtag est disponible (chargé depuis index.html)
-    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+    // Vérifier le consentement aux cookies avant d'envoyer des données
+    const cookieConsent = localStorage.getItem('cookieConsent')
+    
+    // Vérifier que gtag est disponible ET que le consentement a été donné
+    if (
+      typeof window !== 'undefined' && 
+      typeof window.gtag === 'function' && 
+      cookieConsent === 'accepted'
+    ) {
       // Envoyer l'événement page_view à Google Analytics
       window.gtag('config', 'G-MDFBKZVDYM', {
         page_path: location.pathname + location.search,
         page_title: document.title,
+        anonymize_ip: true, // Anonymiser les IP pour le RGPD
       })
     }
   }, [location])

@@ -140,8 +140,16 @@ const Footer = () => {
 
         {/* Barre du bas */}
         <div className="border-t border-white/20 mt-8 pt-6 text-center text-sm text-gray-300">
-          <p>
+          <p className="mb-2">
             &copy; {currentYear} {t('footer.copyright')}
+          </p>
+          <p>
+            <Link 
+              to="/privacy" 
+              className="text-gray-300 hover:text-accent-orange transition-colors underline"
+            >
+              Politique de confidentialité
+            </Link>
           </p>
         </div>
       </div>
