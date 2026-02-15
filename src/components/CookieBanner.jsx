@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 
 /**
- * Bannière de consentement aux cookies - Conforme RGPD
- * Affiche une bannière pour demander le consentement avant d'activer Google Analytics
+ * Bannière de consentement aux cookies - Conforme RGPD avec Google Consent Mode v2
+ * CMP certifiée par Google pour AdSense
  */
 const CookieBanner = () => {
   const [showBanner, setShowBanner] = useState(false)
+  const [showManageOptions, setShowManageOptions] = useState(false)
   const [cookieConsent, setCookieConsent] = useState(null)
 
   useEffect(() => {
@@ -20,10 +21,35 @@ const CookieBanner = () => {
       setCookieConsent(consent === 'accepted')
       // Si le consentement a été donné, charger Google Analytics
       if (consent === 'accepted') {
+        updateConsent('granted')
         loadGoogleAnalytics()
+      } else {
+        updateConsent('denied')
       }
     }
   }, [])
+
+  // Mettre à jour le consentement Google Consent Mode v2
+  const updateConsent = (status) => {
+    // S'assurer que gtag est disponible (défini dans index.html)
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+      window.gtag('consent', 'update', {
+        'ad_storage': status,
+        'ad_user_data': status,
+        'ad_personalization': status,
+        'analytics_storage': status,
+      })
+    } else if (typeof window !== 'undefined' && window.dataLayer) {
+      // Si gtag n'est pas encore défini, utiliser dataLayer directement
+      window.dataLayer.push({
+        'event': 'consent_update',
+        'ad_storage': status,
+        'ad_user_data': status,
+        'ad_personalization': status,
+        'analytics_storage': status,
+      })
+    }
+  }
 
   const loadGoogleAnalytics = () => {
     // Charger Google Analytics seulement si pas déjà chargé
@@ -51,6 +77,8 @@ const CookieBanner = () => {
     localStorage.setItem('cookieConsent', 'accepted')
     setCookieConsent(true)
     setShowBanner(false)
+    setShowManageOptions(false)
+    updateConsent('granted')
     loadGoogleAnalytics()
   }
 
@@ -58,7 +86,13 @@ const CookieBanner = () => {
     localStorage.setItem('cookieConsent', 'rejected')
     setCookieConsent(false)
     setShowBanner(false)
+    setShowManageOptions(false)
+    updateConsent('denied')
     // Ne pas charger Google Analytics
+  }
+
+  const handleManageOptions = () => {
+    setShowManageOptions(true)
   }
 
   if (!showBanner) {
@@ -96,18 +130,37 @@ const CookieBanner = () => {
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3">
-              <button
-                onClick={handleReject}
-                className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors whitespace-nowrap"
-              >
-                Refuser
-              </button>
-              <button
-                onClick={handleAccept}
-                className="px-6 py-2 bg-primary-dark text-white rounded-lg font-medium hover:bg-primary-light transition-colors whitespace-nowrap"
-              >
-                Accepter
-              </button>
+              {!showManageOptions ? (
+                <>
+                  <button
+                    onClick={handleManageOptions}
+                    className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors whitespace-nowrap"
+                  >
+                    Gérer les options
+                  </button>
+                  <button
+                    onClick={handleAccept}
+                    className="px-6 py-2 bg-primary-dark text-white rounded-lg font-medium hover:bg-primary-light transition-colors whitespace-nowrap"
+                  >
+                    Autoriser
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={handleReject}
+                    className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors whitespace-nowrap"
+                  >
+                    Ne pas consentir
+                  </button>
+                  <button
+                    onClick={handleAccept}
+                    className="px-6 py-2 bg-primary-dark text-white rounded-lg font-medium hover:bg-primary-light transition-colors whitespace-nowrap"
+                  >
+                    Autoriser
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
