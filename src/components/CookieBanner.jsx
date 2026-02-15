@@ -81,8 +81,8 @@ const CookieBanner = () => {
                 🍪 Gestion des cookies
               </h3>
               <p className="text-gray-700 text-sm mb-2">
-                Nous utilisons des cookies pour améliorer votre expérience de navigation et analyser le trafic de notre site. 
-                En cliquant sur "Accepter", vous consentez à l'utilisation de cookies à des fins d'analyse via Google Analytics.
+                Nous utilisons des cookies pour améliorer votre expérience de navigation, analyser le trafic de notre site et afficher des publicités personnalisées. 
+                En cliquant sur "Accepter", vous consentez à l'utilisation de cookies à des fins d'analyse (Google Analytics) et de publicité (Google AdSense).
               </p>
               <p className="text-gray-600 text-xs">
                 Vous pouvez en savoir plus dans notre{' '}

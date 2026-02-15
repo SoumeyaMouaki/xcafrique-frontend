@@ -49,14 +49,15 @@ const Privacy = () => {
             2.1 Données collectées automatiquement
           </h3>
           <p className="text-gray-700 mb-4">
-            Lorsque vous visitez notre site, nous collectons automatiquement certaines informations via Google Analytics :
+            Lorsque vous visitez notre site, nous collectons automatiquement certaines informations via Google Analytics et Google AdSense :
           </p>
           <ul className="list-disc list-inside text-gray-700 mb-4 space-y-2">
-            <li>Adresse IP (anonymisée)</li>
+            <li>Adresse IP (anonymisée pour Analytics)</li>
             <li>Type de navigateur et système d'exploitation</li>
             <li>Pages visitées et durée de visite</li>
             <li>Source de trafic (moteur de recherche, lien direct, etc.)</li>
             <li>Données de géolocalisation approximative (pays, ville)</li>
+            <li>Centres d'intérêt (pour la personnalisation des publicités AdSense)</li>
           </ul>
 
           <h3 className="text-xl font-semibold text-primary-dark mb-3">
@@ -102,6 +103,7 @@ const Privacy = () => {
           <h3 className="text-xl font-semibold text-primary-dark mb-3">
             4.2 Cookies utilisés sur notre site
           </h3>
+          
           <div className="bg-gray-50 p-4 rounded-lg mb-4">
             <h4 className="font-semibold text-primary-dark mb-2">Cookies analytiques (Google Analytics)</h4>
             <p className="text-gray-700 text-sm mb-2">
@@ -110,8 +112,33 @@ const Privacy = () => {
             <p className="text-gray-700 text-sm mb-2">
               <strong>Durée :</strong> 2 ans maximum
             </p>
-            <p className="text-gray-700 text-sm">
+            <p className="text-gray-700 text-sm mb-2">
               <strong>Consentement requis :</strong> Oui (vous pouvez refuser via la bannière de cookies)
+            </p>
+            <p className="text-gray-700 text-sm">
+              <strong>Politique de confidentialité Google :</strong>{' '}
+              <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-primary-dark hover:text-accent-orange underline">
+                https://policies.google.com/privacy
+              </a>
+            </p>
+          </div>
+
+          <div className="bg-gray-50 p-4 rounded-lg mb-4">
+            <h4 className="font-semibold text-primary-dark mb-2">Cookies publicitaires (Google AdSense)</h4>
+            <p className="text-gray-700 text-sm mb-2">
+              <strong>Finalité :</strong> Afficher des publicités personnalisées et mesurer leur performance
+            </p>
+            <p className="text-gray-700 text-sm mb-2">
+              <strong>Durée :</strong> Variable (généralement 1 à 2 ans)
+            </p>
+            <p className="text-gray-700 text-sm mb-2">
+              <strong>Consentement requis :</strong> Oui (vous pouvez refuser via la bannière de cookies)
+            </p>
+            <p className="text-gray-700 text-sm">
+              <strong>Politique de confidentialité Google :</strong>{' '}
+              <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-primary-dark hover:text-accent-orange underline">
+                https://policies.google.com/privacy
+              </a>
             </p>
           </div>
 
@@ -139,6 +166,10 @@ const Privacy = () => {
             <li>
               <strong>Google Analytics :</strong> Les données analytiques sont transmises à Google conformément à leur 
               politique de confidentialité. Les adresses IP sont anonymisées.
+            </li>
+            <li>
+              <strong>Google AdSense :</strong> Les données de navigation peuvent être utilisées pour afficher des publicités 
+              personnalisées. Ces données sont transmises à Google conformément à leur politique de confidentialité.
             </li>
             <li>
               <strong>Obligations légales :</strong> Si la loi l'exige, nous pouvons divulguer vos informations.
