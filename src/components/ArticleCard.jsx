@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import { translateCategory } from '../utils/translations'
 import useReadArticles from '../hooks/useReadArticles'
 
 /**
@@ -8,12 +10,13 @@ import useReadArticles from '../hooks/useReadArticles'
  * @param {Object} article - L'objet article à afficher
  */
 const ArticleCard = ({ article }) => {
+  const { i18n } = useTranslation()
   const { isRead } = useReadArticles()
   const formatDate = (dateString) => {
     if (!dateString) return ''
     const date = new Date(dateString)
     if (isNaN(date.getTime())) return ''
-    return date.toLocaleDateString('fr-FR', {
+    return date.toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'fr-FR', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
@@ -24,7 +27,9 @@ const ArticleCard = ({ article }) => {
   if (!article) return null
   
   // Gérer la catégorie (peut être un objet ou une string)
-  const categoryName = article?.category?.name || article?.category || 'Général'
+  const rawCategory = article?.category?.name || article?.category || 'Général'
+  const translatedCategory = translateCategory(rawCategory, i18n.language)
+  const categoryName = typeof translatedCategory === 'object' ? translatedCategory.name : translatedCategory
   const categorySlug = article?.category?.slug || ''
   
   // Gérer l'image (peut être image, featuredImage, etc.)
@@ -130,7 +135,7 @@ const ArticleCard = ({ article }) => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
               </svg>
-              {article.views} vue{article.views > 1 ? 's' : ''}
+              {article.views} {i18n.language === 'en' ? 'view' : 'vue'}{article.views > 1 ? (i18n.language === 'en' ? 's' : 's') : ''}
             </span>
           )}
           {article.shareCount !== undefined && article.shareCount > 0 && (
@@ -138,7 +143,7 @@ const ArticleCard = ({ article }) => {
               <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
               </svg>
-              {article.shareCount} partage{article.shareCount > 1 ? 's' : ''}
+              {article.shareCount} {i18n.language === 'en' ? 'share' : 'partage'}{article.shareCount > 1 ? (i18n.language === 'en' ? 's' : 's') : ''}
             </span>
           )}
         </div>
@@ -149,7 +154,7 @@ const ArticleCard = ({ article }) => {
           className="btn-primary inline-block text-center w-full group/btn"
         >
           <span className="flex items-center justify-center">
-            Lire plus
+            {i18n.language === 'en' ? 'Read more' : 'Lire plus'}
             <svg className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>

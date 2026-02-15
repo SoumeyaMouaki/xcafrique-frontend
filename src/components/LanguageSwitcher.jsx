@@ -1,3 +1,4 @@
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -10,9 +11,43 @@ const LanguageSwitcher = () => {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef(null)
 
+  const FlagFR = () => (
+    <svg className="w-5 h-5" viewBox="0 0 640 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g clipPath="url(#clip0_fr)">
+        <path d="M0 0H213.3V480H0V0Z" fill="#ED2939"/>
+        <path d="M213.3 0H426.7V480H213.3V0Z" fill="#FFFFFF"/>
+        <path d="M426.7 0H640V480H426.7V0Z" fill="#002654"/>
+      </g>
+      <defs>
+        <clipPath id="clip0_fr">
+          <rect width="640" height="480" fill="white"/>
+        </clipPath>
+      </defs>
+    </svg>
+  )
+
+  const FlagGB = () => (
+    <svg className="w-5 h-5" viewBox="0 0 640 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <clipPath id="a_gb">
+          <path fillOpacity=".7" d="M-85.3 0h682.6v512h-682.6z"/>
+        </clipPath>
+      </defs>
+      <g clipPath="url(#a_gb)" transform="translate(80) scale(.94)">
+        <g strokeWidth="1pt">
+          <path fill="#006" d="M-256 0H768v512H-256z"/>
+          <path fill="#fff" d="M-256 0v57.244l909.2 454.756H768v-57.244L-141.2 0H-256zM768 0v57.244L-141.2 512H-256v-57.244L909.2 0H768z" strokeWidth=".8"/>
+          <path fill="#fff" d="M170.6 0h512v170.6H170.6zm0 341.2h512V512H170.6z" strokeWidth=".8"/>
+          <path fill="#c00" d="M-256 204.8H768v102.4H-256z" strokeWidth=".8"/>
+          <path fill="#c00" d="M204.8 0h102.4v512H204.8z" strokeWidth=".8"/>
+        </g>
+      </g>
+    </svg>
+  )
+
   const languages = [
-    { code: 'fr', name: 'Français', flag: '🇫🇷' },
-    { code: 'en', name: 'English', flag: '🇬🇧' }
+    { code: 'fr', name: 'Français', Flag: FlagFR },
+    { code: 'en', name: 'English', Flag: FlagGB }
   ]
 
   const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[0]
@@ -46,7 +81,7 @@ const LanguageSwitcher = () => {
         aria-label="Change language"
         aria-expanded={isOpen}
       >
-        <span className="text-xl">{currentLanguage.flag}</span>
+        <span className="flex items-center justify-center">{React.createElement(currentLanguage.Flag)}</span>
         <span className="hidden md:inline text-sm font-medium">{currentLanguage.code.toUpperCase()}</span>
         <svg 
           className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} 
@@ -75,7 +110,7 @@ const LanguageSwitcher = () => {
                   i18n.language === lang.code ? 'bg-accent-orange/20 font-semibold' : ''
                 }`}
               >
-                <span className="text-2xl">{lang.flag}</span>
+                <span className="flex items-center justify-center">{React.createElement(lang.Flag)}</span>
                 <span className={`flex-1 ${i18n.language === lang.code ? 'text-accent-orange' : 'text-gray-700'}`}>
                   {lang.name}
                 </span>

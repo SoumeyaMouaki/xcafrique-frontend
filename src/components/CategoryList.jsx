@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import { translateCategory } from '../utils/translations'
 import { useState, useEffect } from 'react'
 import API from '../api'
 import { extractApiData, handleApiError } from '../utils/apiHelpers'
@@ -9,6 +11,7 @@ import LoadingSpinner from './LoadingSpinner'
  * Affiche toutes les catégories sous forme de liens récupérées depuis l'API
  */
 const CategoryList = ({ categories: propCategories = null }) => {
+  const { i18n, t } = useTranslation()
   const [categories, setCategories] = useState(propCategories || [])
   const [loading, setLoading] = useState(!propCategories)
   const [error, setError] = useState(false)
@@ -150,7 +153,7 @@ const CategoryList = ({ categories: propCategories = null }) => {
   return (
     <div className="bg-gray-50 rounded-lg p-6">
       <h2 className="text-2xl font-semibold mb-4 text-primary-dark">
-        Catégories
+        {t('footer.categories')}
       </h2>
       <ul className="space-y-2">
         <li>
@@ -161,18 +164,20 @@ const CategoryList = ({ categories: propCategories = null }) => {
             <svg className="w-5 h-5 mr-2 text-primary-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
             </svg>
-            Toutes les catégories
+            {t('categories.allCategories')}
           </Link>
         </li>
         {categories.length > 0 ? (
           categories
             .filter(cat => cat.isActive !== false) // Filtrer uniquement les catégories actives
             .map((category) => {
-              const categoryName = category.name || category
+              const rawCategoryName = category.name || category
+              const translatedCategory = translateCategory(category, i18n.language)
+              const categoryName = typeof translatedCategory === 'object' ? translatedCategory.name : translatedCategory
               // Normaliser le slug comme le backend
               const categorySlug = category.slug 
                 ? category.slug.trim().toLowerCase() 
-                : (categoryName || '').trim().toLowerCase().replace(/\s+/g, '-')
+                : (rawCategoryName || '').trim().toLowerCase().replace(/\s+/g, '-')
               const categoryId = category._id || category.id || categorySlug
               
               return (
@@ -201,7 +206,7 @@ const CategoryList = ({ categories: propCategories = null }) => {
               )
             })
         ) : (
-          <li className="text-gray-500 text-sm py-2">Aucune catégorie disponible</li>
+          <li className="text-gray-500 text-sm py-2">{t('footer.noCategories')}</li>
         )}
       </ul>
     </div>
