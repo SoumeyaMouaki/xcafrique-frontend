@@ -1,0 +1,135 @@
+{
+  "common": {
+    "search": "Search",
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry",
+    "readMore": "Read more",
+    "back": "Back",
+    "close": "Close",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "noResults": "No results",
+    "noData": "No data available"
+  },
+  "nav": {
+    "home": "Home",
+    "categories": "Categories",
+    "videos": "Videos",
+    "about": "About",
+    "contact": "Contact",
+    "search": "Search",
+    "searchPlaceholder": "Search for articles...",
+    "menu": "Menu"
+  },
+  "hero": {
+    "title": "Air News Cross-Checked",
+    "subtitle": "Your reliable source of information on African aviation news. Comprehensive industry coverage with in-depth analysis and rigorous verification.",
+    "readNews": "Read the latest news",
+    "subscribe": "Subscribe"
+  },
+  "news": {
+    "featured": "Featured",
+    "loading": "Loading news...",
+    "error": "Unable to load news",
+    "noArticles": "No articles available at the moment.",
+    "readArticle": "Read article",
+    "dateNotAvailable": "Date not available"
+  },
+  "footer": {
+    "tagline": "Air News Cross-Checked. Your reliable source of information on African aviation news.",
+    "quickLinks": "Quick Links",
+    "categories": "Categories",
+    "loadingCategories": "Loading...",
+    "noCategories": "No categories available",
+    "copyright": "XCAfrique - Air News, Cross-Checked. All rights reserved."
+  },
+  "about": {
+    "title": "About XCAfrique",
+    "mission": "Our Mission",
+    "missionText1": "XCAfrique is a professional media dedicated to African aviation news. Our ambition is to provide reliable, verified and contextualized information on the entire air sector of the continent.",
+    "missionText2": "In an environment where information circulates quickly, sometimes incompletely or unverified, XCAfrique positions itself as a reference platform for aviation professionals, enthusiasts and all those who follow the evolution of air transport in Africa.",
+    "missionText3": "We cover a wide range of topics: airline news, safety and regulation, airport infrastructure, training, innovation, African market, sustainable development and sector analysis.",
+    "missionText4": "Our approach is based on three pillars: rigor, transparency and systematic fact-checking. We prioritize clear, documented and useful information, designed to support the growth of a strategic sector.",
+    "founder": "Founder of XCAfrique",
+    "founderBio1": "Graduated with a master's degree in communication and public relations, she worked for several years as Commercial Flight Personnel, an experience that gave her concrete knowledge of air operations, security and internal realities of air transport.",
+    "founderBio2": "Passionate about aviation and reliable information production, she has also collaborated as a web editor, developing a clear, precise and documented style. Her field of expertise covers aeronautical news, safety, innovation, airlines, passenger experience and the evolution of sector professions.",
+    "founderBio3": "Convinced of the importance of a serious and rigorous media to support the development of air transport in Africa, she founded XCAfrique, a platform dedicated to analysis, verification and dissemination of reliable aeronautical information. Through XCAfrique, she defends factual, structured and transparent information.",
+    "values": "Our Values",
+    "reliability": "Reliability",
+    "reliabilityText": "Every piece of information is verified and cross-checked with multiple sources before publication.",
+    "professionalism": "Professionalism",
+    "professionalismText": "Rigorous and in-depth coverage of African aviation news.",
+    "independence": "Independence",
+    "independenceText": "An independent and objective editorial approach, without external influence.",
+    "contactUs": "Contact us"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Have a question, suggestion or information request? Feel free to contact us. We will respond as soon as possible.",
+    "sendMessage": "Send us a message",
+    "contactInfo": "Contact Information",
+    "email": "Email",
+    "followUs": "Follow Us",
+    "followUsText": "Stay connected with us on social media to not miss any news.",
+    "name": "Name",
+    "subject": "Subject",
+    "message": "Message",
+    "namePlaceholder": "Your name",
+    "emailPlaceholder": "your.email@example.com",
+    "subjectPlaceholder": "Subject of your message",
+    "messagePlaceholder": "Your message...",
+    "requiredFields": "Please fill in the required fields: name, email and message.",
+    "invalidEmail": "Please provide a valid email address.",
+    "sending": "Sending...",
+    "success": "Message sent successfully!",
+    "error": "Error sending message. Please try again."
+  },
+  "search": {
+    "title": "Search Results",
+    "noResults": "No results found",
+    "resultsFor": "Results for",
+    "suggestions": "Suggestions",
+    "loadingSuggestions": "Loading suggestions...",
+    "noSuggestions": "No suggestions found",
+    "tryOtherKeywords": "Try with other keywords or browse all our categories",
+    "articleFound": "article found",
+    "articlesFound": "articles found",
+    "error": "Error during search. Please try again."
+  },
+  "categories": {
+    "title": "Categories",
+    "allCategories": "All Categories",
+    "articlesIn": "Articles in",
+    "noArticles": "No articles in this category"
+  },
+  "videos": {
+    "title": "Videos",
+    "noVideos": "No videos available",
+    "featured": "Featured Videos",
+    "loading": "Loading videos...",
+    "error": "Unable to load videos",
+    "videoNotAvailable": "Video URL not available"
+  },
+  "follow": {
+    "title": "Follow us on social media",
+    "subtitle": "Join our community and stay informed about African aviation news",
+    "socialMedia": "Social Media",
+    "followUsEverywhere": "Follow us everywhere",
+    "description": "Join our community on social media to not miss any African aviation news.",
+    "tip": "Tip: Follow us on all our networks for exclusive access to the latest news and analysis.",
+    "backHome": "Back to home"
+  },
+  "article": {
+    "share": "Share",
+    "publishedOn": "Published on",
+    "category": "Category",
+    "author": "Author",
+    "relatedArticles": "Related Articles",
+    "readTime": "min read"
+  }
+}
+

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import API from '../api'
 import { extractApiData, handleApiError } from '../utils/apiHelpers'
 
@@ -7,6 +8,7 @@ import { extractApiData, handleApiError } from '../utils/apiHelpers'
  * Footer - Pied de page complet en 3 colonnes
  */
 const Footer = () => {
+  const { t } = useTranslation()
   const currentYear = new Date().getFullYear()
   const [categories, setCategories] = useState([])
   const [loadingCategories, setLoadingCategories] = useState(true)
@@ -20,11 +22,11 @@ const Footer = () => {
   ]
 
   const quickLinks = [
-    { to: '/', label: 'Home' },
-    { to: '/categories', label: 'Categories' },
-    { to: '/videos', label: 'Videos' },
-    { to: '/about', label: 'About' },
-    { to: '/contact', label: 'Contact' },
+    { to: '/', label: t('nav.home') },
+    { to: '/categories', label: t('nav.categories') },
+    { to: '/videos', label: t('nav.videos') },
+    { to: '/about', label: t('nav.about') },
+    { to: '/contact', label: t('nav.contact') },
   ]
 
   // Récupérer les catégories depuis l'API
@@ -67,7 +69,7 @@ const Footer = () => {
               </span>
             </div>
             <p className="text-gray-300 text-sm mb-4">
-              Air News Cross-Checked. Your reliable source of information on African aviation news.
+              {t('footer.tagline')}
             </p>
             <div className="flex space-x-4">
               {socialLinks.map((social) => (
@@ -89,7 +91,7 @@ const Footer = () => {
 
           {/* Colonne 2 - Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <h3 className="text-lg font-semibold mb-4">{t('footer.quickLinks')}</h3>
             <ul className="space-y-2">
               {quickLinks.map((link, index) => (
                 <li key={`${link.to}-${index}`}>
@@ -106,9 +108,9 @@ const Footer = () => {
 
           {/* Colonne 3 - Categories */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Categories</h3>
+            <h3 className="text-lg font-semibold mb-4">{t('footer.categories')}</h3>
             {loadingCategories ? (
-              <p className="text-gray-300 text-sm">Chargement...</p>
+              <p className="text-gray-300 text-sm">{t('footer.loadingCategories')}</p>
             ) : categories.length > 0 ? (
               <ul className="space-y-2">
                 {categories.map((category) => {
@@ -131,7 +133,7 @@ const Footer = () => {
                 })}
               </ul>
             ) : (
-              <p className="text-gray-300 text-sm">Aucune catégorie disponible</p>
+              <p className="text-gray-300 text-sm">{t('footer.noCategories')}</p>
             )}
           </div>
         </div>
@@ -139,7 +141,7 @@ const Footer = () => {
         {/* Barre du bas */}
         <div className="border-t border-white/20 mt-8 pt-6 text-center text-sm text-gray-300">
           <p>
-            &copy; {currentYear} XCAfrique - Air News, Cross-Checked. All rights reserved.
+            &copy; {currentYear} {t('footer.copyright')}
           </p>
         </div>
       </div>

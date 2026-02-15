@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import SEO from '../components/SEO'
 import useArticles from '../hooks/useArticles'
 import LoadingSpinner from '../components/LoadingSpinner'
@@ -11,6 +12,7 @@ import ErrorMessage from '../components/ErrorMessage'
  * Utilise le paramètre type=video pour filtrer les articles vidéo depuis l'API
  */
 const Videos = () => {
+  const { t } = useTranslation()
   const [searchParams] = useSearchParams()
   const [selectedVideo, setSelectedVideo] = useState(null)
   
@@ -46,7 +48,7 @@ const Videos = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <SEO
-        title="Videos - XCAfrique"
+        title={`${t('videos.title')} - XCAfrique`}
         description="Découvrez nos vidéos sur l'actualité aéronautique africaine : analyses, reportages et interviews."
         keywords="videos, aviation, Afrique, reportages, interviews"
       />
@@ -58,19 +60,19 @@ const Videos = () => {
           transition={{ duration: 0.6 }}
           className="text-4xl font-bold text-primary-dark mb-8 text-center"
         >
-          Featured Videos
+          {t('videos.featured')}
         </motion.h1>
 
         {loading && (
           <div className="flex justify-center py-12">
-            <LoadingSpinner text="Chargement des vidéos..." />
+            <LoadingSpinner text={t('videos.loading')} />
           </div>
         )}
 
         {error && (
           <div className="flex justify-center py-12">
             <ErrorMessage 
-              message={error.message || "Impossible de charger les vidéos"} 
+              message={error.message || t('videos.error')} 
               onRetry={() => window.location.reload()}
             />
           </div>
@@ -78,7 +80,7 @@ const Videos = () => {
 
         {!loading && !error && videos.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">Aucune vidéo disponible pour le moment.</p>
+            <p className="text-gray-500 text-lg">{t('videos.noVideos')}</p>
           </div>
         )}
 
@@ -117,7 +119,7 @@ const Videos = () => {
                   </div>
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-white">
-                    <p>URL vidéo non disponible</p>
+                    <p>{t('videos.videoNotAvailable')}</p>
                   </div>
                 )}
               </div>

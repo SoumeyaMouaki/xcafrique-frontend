@@ -1,4 +1,5 @@
 import { useSearchParams, Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import useArticles from '../hooks/useArticles'
 import ArticleCard from '../components/ArticleCard'
 import LoadingSpinner from '../components/LoadingSpinner'
@@ -9,6 +10,7 @@ import SEO from '../components/SEO'
  * Page Search - Résultats de recherche
  */
 const Search = () => {
+  const { t } = useTranslation()
   const [searchParams] = useSearchParams()
   const query = searchParams.get('q') || ''
   
@@ -21,18 +23,18 @@ const Search = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <SEO
-        title={`Recherche: ${query} - XCAfrique`}
-        description={`Résultats de recherche pour "${query}" sur XCAfrique`}
+        title={`${t('search.title')}: ${query} - XCAfrique`}
+        description={`${t('search.resultsFor')} "${query}" sur XCAfrique`}
         keywords={`recherche, ${query}, aviation, Afrique`}
       />
 
       <h1 className="text-4xl font-bold text-primary-dark mb-2">
-        Résultats de recherche
+        {t('search.title')}
       </h1>
       
       {query && (
         <p className="text-gray-600 mb-8">
-          Recherche pour : <span className="font-semibold text-primary-dark">"{query}"</span>
+          {t('search.resultsFor')} : <span className="font-semibold text-primary-dark">"{query}"</span>
         </p>
       )}
 
@@ -42,20 +44,20 @@ const Search = () => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
           <p className="text-gray-600 text-lg mb-4">
-            Entrez un terme de recherche pour trouver des articles
+            {t('search.noResults')}
           </p>
         </div>
       ) : loading ? (
-        <LoadingSpinner text="Recherche en cours..." />
+        <LoadingSpinner text={t('common.loading')} />
       ) : error ? (
         <ErrorMessage 
-          message={error.message || "Erreur lors de la recherche. Veuillez réessayer."} 
+          message={error.message || t('search.error')} 
           onRetry={() => window.location.reload()}
         />
       ) : articles.length > 0 ? (
         <>
           <p className="text-gray-600 mb-6">
-            {articles.length} {articles.length === 1 ? 'article trouvé' : 'articles trouvés'}
+            {articles.length} {articles.length === 1 ? t('search.articleFound') : t('search.articlesFound')}
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {articles.map(article => (
@@ -69,13 +71,13 @@ const Search = () => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
           <p className="text-gray-600 text-lg mb-4">
-            Aucun résultat trouvé pour "<span className="font-semibold">{query}</span>"
+            {t('search.noResults')} "<span className="font-semibold">{query}</span>"
           </p>
           <p className="text-gray-500 mb-6">
-            Essayez avec d'autres mots-clés ou consultez toutes nos catégories
+            {t('search.tryOtherKeywords')}
           </p>
           <Link to="/categories" className="btn-primary inline-block">
-            Voir toutes les catégories
+            {t('categories.allCategories')}
           </Link>
         </div>
       )}

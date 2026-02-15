@@ -1,11 +1,13 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import SEO from '../components/SEO'
 
 /**
  * Page Follow - Page dédiée au suivi sur les réseaux sociaux
  */
 const Follow = () => {
+  const { t } = useTranslation()
   const socialLinks = [
     {
       name: 'Instagram',
@@ -56,7 +58,7 @@ const Follow = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-dark via-primary-dark to-blue-900">
       <SEO
-        title="Suivez-nous - XCAfrique"
+        title={`${t('follow.title')} - XCAfrique`}
         description="Suivez XCAfrique sur tous nos réseaux sociaux pour ne rien manquer de l'actualité aéronautique africaine."
         keywords="réseaux sociaux, XCAfrique, Instagram, Twitter, TikTok, LinkedIn, aviation africaine"
       />
@@ -76,7 +78,7 @@ const Follow = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-4xl md:text-5xl font-bold text-white mb-4"
             >
-              Suivez-nous sur les réseaux sociaux
+              {t('follow.title')}
             </motion.h1>
             <motion.p
               initial={{ opacity: 0 }}
@@ -84,7 +86,7 @@ const Follow = () => {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="text-xl text-gray-200 max-w-2xl mx-auto"
             >
-              Rejoignez notre communauté et restez informé de l'actualité aéronautique africaine
+              {t('follow.subtitle')}
             </motion.p>
           </div>
 
@@ -102,13 +104,13 @@ const Follow = () => {
                 </svg>
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-primary-dark">Réseaux sociaux</h2>
-                <p className="text-gray-600 text-sm">Suivez-nous partout</p>
+                <h2 className="text-2xl font-bold text-primary-dark">{t('follow.socialMedia')}</h2>
+                <p className="text-gray-600 text-sm">{t('follow.followUsEverywhere')}</p>
               </div>
             </div>
 
             <p className="text-gray-700 mb-6">
-              Rejoignez notre communauté sur les réseaux sociaux pour ne rien manquer de l'actualité aéronautique africaine.
+              {t('follow.description')}
             </p>
 
             <div className="space-y-4">
@@ -140,7 +142,7 @@ const Follow = () => {
 
             <div className="mt-6 p-4 bg-gray-50 rounded-lg">
               <p className="text-sm text-gray-600 text-center">
-                <strong className="text-primary-dark">Astuce :</strong> Suivez-nous sur tous nos réseaux pour un accès exclusif aux dernières actualités et analyses.
+                <strong className="text-primary-dark">{t('follow.tip')}</strong>
               </p>
             </div>
           </motion.div>
@@ -159,7 +161,7 @@ const Follow = () => {
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              Retour à l'accueil
+              {t('follow.backHome')}
             </Link>
           </motion.div>
         </motion.div>

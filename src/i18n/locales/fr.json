@@ -1,0 +1,135 @@
+{
+  "common": {
+    "search": "Rechercher",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "retry": "Réessayer",
+    "readMore": "Lire la suite",
+    "back": "Retour",
+    "close": "Fermer",
+    "submit": "Envoyer",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "noResults": "Aucun résultat",
+    "noData": "Aucune donnée disponible"
+  },
+  "nav": {
+    "home": "Home",
+    "categories": "Categories",
+    "videos": "Videos",
+    "about": "About",
+    "contact": "Contact",
+    "search": "Rechercher",
+    "searchPlaceholder": "Rechercher des articles...",
+    "menu": "Menu"
+  },
+  "hero": {
+    "title": "Air News Cross-Checked",
+    "subtitle": "Votre source d'information fiable sur l'actualité aéronautique africaine. Couverture complète de l'industrie avec analyses approfondies et vérifications rigoureuses.",
+    "readNews": "Lire les dernières actualités",
+    "subscribe": "S'abonner"
+  },
+  "news": {
+    "featured": "A la Une",
+    "loading": "Chargement des actualités...",
+    "error": "Impossible de charger les actualités",
+    "noArticles": "Aucun article disponible pour le moment.",
+    "readArticle": "Article lu",
+    "dateNotAvailable": "Date non disponible"
+  },
+  "footer": {
+    "tagline": "Air News Cross-Checked. Your reliable source of information on African aviation news.",
+    "quickLinks": "Quick Links",
+    "categories": "Categories",
+    "loadingCategories": "Chargement...",
+    "noCategories": "Aucune catégorie disponible",
+    "copyright": "XCAfrique - Air News, Cross-Checked. All rights reserved."
+  },
+  "about": {
+    "title": "À propos de XCAfrique",
+    "mission": "Notre mission",
+    "missionText1": "XCAfrique est un média professionnel dédié à l'actualité aéronautique africaine. Notre ambition est d'offrir une information fiable, vérifiée et contextualisée sur l'ensemble du secteur aérien du continent.",
+    "missionText2": "Dans un environnement où l'information circule vite, parfois de manière incomplète ou non vérifiée, XCAfrique se positionne comme une plateforme de référence pour les professionnels de l'aviation, les passionnés et tous ceux qui suivent l'évolution du transport aérien en Afrique.",
+    "missionText3": "Nous couvrons un large éventail de thématiques : actualité des compagnies aériennes, sécurité et réglementation, infrastructures aéroportuaires, formation, innovation, marché africain, développement durable et analyse sectorielle.",
+    "missionText4": "Notre approche repose sur trois piliers : rigueur, transparence et vérification systématique des faits. Nous privilégions une information claire, documentée et utile, pensée pour accompagner la croissance d'un secteur stratégique.",
+    "founder": "Fondatrice de XCAfrique",
+    "founderBio1": "Diplômée d'un master en communication et relations publiques, elle a travaillé plusieurs années comme Personnel Navigant Commercial, une expérience qui lui a offert une connaissance concrète des opérations aériennes, de la sûreté et des réalités internes du transport aérien.",
+    "founderBio2": "Passionnée par l'aviation et la production d'information fiable, elle a également collaboré comme rédactrice web, développant un style clair, précis et documenté. Son champ d'expertise touche à l'actualité aéronautique, la sécurité, l'innovation, les compagnies aériennes, l'expérience passager et l'évolution des métiers du secteur.",
+    "founderBio3": "Convaincue de l'importance d'un média sérieux et rigoureux pour accompagner le développement du transport aérien en Afrique, elle a fondé XCAfrique, une plateforme dédiée à l'analyse, à la vérification et à la diffusion d'informations aéronautiques fiables. À travers XCAfrique, elle défend une information factuelle, structurée et transparente.",
+    "values": "Nos valeurs",
+    "reliability": "Fiabilité",
+    "reliabilityText": "Chaque information est vérifiée et croisée avec plusieurs sources avant publication.",
+    "professionalism": "Professionnalisme",
+    "professionalismText": "Un traitement rigoureux et approfondi de l'actualité aéronautique africaine.",
+    "independence": "Indépendance",
+    "independenceText": "Une approche éditoriale indépendante et objective, sans influence extérieure.",
+    "contactUs": "Nous contacter"
+  },
+  "contact": {
+    "title": "Contactez-nous",
+    "subtitle": "Une question, une suggestion ou une demande d'information ? N'hésitez pas à nous contacter. Nous vous répondrons dans les plus brefs délais.",
+    "sendMessage": "Envoyez-nous un message",
+    "contactInfo": "Informations de contact",
+    "email": "Email",
+    "followUs": "Suivez-nous",
+    "followUsText": "Restez connecté avec nous sur les réseaux sociaux pour ne rien manquer de l'actualité.",
+    "name": "Nom",
+    "subject": "Sujet",
+    "message": "Message",
+    "namePlaceholder": "Votre nom",
+    "emailPlaceholder": "votre.email@exemple.com",
+    "subjectPlaceholder": "Sujet de votre message",
+    "messagePlaceholder": "Votre message...",
+    "requiredFields": "Veuillez remplir les champs obligatoires : nom, email et message.",
+    "invalidEmail": "Veuillez fournir une adresse email valide.",
+    "sending": "Envoi en cours...",
+    "success": "Message envoyé avec succès !",
+    "error": "Erreur lors de l'envoi du message. Veuillez réessayer."
+  },
+  "search": {
+    "title": "Résultats de recherche",
+    "noResults": "Aucun résultat trouvé",
+    "resultsFor": "Résultats pour",
+    "suggestions": "Suggestions",
+    "loadingSuggestions": "Chargement des suggestions...",
+    "noSuggestions": "Aucune suggestion trouvée",
+    "tryOtherKeywords": "Essayez avec d'autres mots-clés ou consultez toutes nos catégories",
+    "articleFound": "article trouvé",
+    "articlesFound": "articles trouvés",
+    "error": "Erreur lors de la recherche. Veuillez réessayer."
+  },
+  "categories": {
+    "title": "Catégories",
+    "allCategories": "Toutes les catégories",
+    "articlesIn": "Articles dans",
+    "noArticles": "Aucun article dans cette catégorie"
+  },
+  "videos": {
+    "title": "Vidéos",
+    "noVideos": "Aucune vidéo disponible",
+    "featured": "Vidéos à la une",
+    "loading": "Chargement des vidéos...",
+    "error": "Impossible de charger les vidéos",
+    "videoNotAvailable": "URL vidéo non disponible"
+  },
+  "follow": {
+    "title": "Suivez-nous sur les réseaux sociaux",
+    "subtitle": "Rejoignez notre communauté et restez informé de l'actualité aéronautique africaine",
+    "socialMedia": "Réseaux sociaux",
+    "followUsEverywhere": "Suivez-nous partout",
+    "description": "Rejoignez notre communauté sur les réseaux sociaux pour ne rien manquer de l'actualité aéronautique africaine.",
+    "tip": "Astuce : Suivez-nous sur tous nos réseaux pour un accès exclusif aux dernières actualités et analyses.",
+    "backHome": "Retour à l'accueil"
+  },
+  "article": {
+    "share": "Partager",
+    "publishedOn": "Publié le",
+    "category": "Catégorie",
+    "author": "Auteur",
+    "relatedArticles": "Articles similaires",
+    "readTime": "min de lecture"
+  }
+}
+

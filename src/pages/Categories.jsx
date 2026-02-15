@@ -1,4 +1,5 @@
 import { useParams, Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import ArticleCard from '../components/ArticleCard'
 import CategoryList from '../components/CategoryList'
 import SEO from '../components/SEO'
@@ -13,6 +14,7 @@ import { useState, useEffect, useMemo } from 'react'
  * Page Catégories - Affiche les articles par catégorie ou tous les articles
  */
 const Categories = () => {
+  const { t } = useTranslation()
   const { category } = useParams()
   const decodedCategory = category ? decodeURIComponent(category) : null
   const [allCategories, setAllCategories] = useState([])
@@ -73,10 +75,10 @@ const Categories = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <SEO
-        title={decodedCategory ? `${decodedCategory} - XCAfrique` : "Catégories - XCAfrique"}
+        title={decodedCategory ? `${decodedCategory} - XCAfrique` : `${t('categories.title')} - XCAfrique`}
         description={decodedCategory 
-          ? `Articles dans la catégorie ${decodedCategory} sur l'actualité aéronautique africaine`
-          : "Découvrez tous nos articles sur l'actualité aéronautique africaine par catégorie"
+          ? `${t('categories.articlesIn')} ${decodedCategory}`
+          : t('categories.allCategories')
         }
         keywords={decodedCategory ? `${decodedCategory}, aviation, Afrique` : "aviation, Afrique, catégories"}
       />
@@ -89,21 +91,21 @@ const Categories = () => {
         {/* Contenu principal */}
         <main className="lg:col-span-3">
           <h1 className="text-4xl font-bold text-primary-dark mb-2">
-            {decodedCategory ? decodedCategory : 'Toutes les catégories'}
+            {decodedCategory ? decodedCategory : t('categories.allCategories')}
           </h1>
           <p className="text-gray-600 mb-8">
             {decodedCategory 
-              ? `Articles dans la catégorie "${decodedCategory}"`
-              : 'Découvrez tous nos articles sur l\'actualité aéronautique africaine'
+              ? `${t('categories.articlesIn')} "${decodedCategory}"`
+              : t('categories.allCategories')
             }
           </p>
 
           {loading || loadingCategories ? (
-            <LoadingSpinner text="Chargement des articles..." />
+            <LoadingSpinner text={t('common.loading')} />
           ) : error && error.status !== 404 ? (
             // Afficher l'erreur seulement si ce n'est pas une 404 (catégorie vide)
             <ErrorMessage 
-              message={error.message || "Impossible de charger les articles. Vérifiez que le backend est démarré et que la configuration CORS est correcte."} 
+              message={error.message || t('common.error')} 
               onRetry={() => window.location.reload()}
               isCors={true}
             />
@@ -120,24 +122,12 @@ const Categories = () => {
               </svg>
               <p className="text-gray-600 text-lg mb-4">
                 {decodedCategory 
-                  ? `Aucun article trouvé dans la catégorie "${decodedCategory}".` 
-                  : 'Aucun article disponible pour le moment.'}
-              </p>
-              <p className="text-gray-500 text-sm mb-6">
-                {decodedCategory 
-                  ? (allCategories.length > 0 && !allCategories.find(cat => {
-                      const catSlug = (cat.slug || '').toLowerCase()
-                      const catName = (cat.name || '').toLowerCase()
-                      const searchSlug = (decodedCategory || '').toLowerCase()
-                      return catSlug === searchSlug || catName === searchSlug
-                    })
-                      ? 'Cette catégorie n\'existe pas ou n\'a pas encore d\'articles publiés.'
-                      : 'Cette catégorie sera bientôt alimentée avec du contenu.')
-                  : 'Revenez bientôt pour découvrir nos nouveaux articles.'}
+                  ? t('categories.noArticles') 
+                  : t('news.noArticles')}
               </p>
               {decodedCategory && (
                 <Link to="/categories" className="btn-primary inline-block">
-                  Voir toutes les catégories
+                  {t('categories.allCategories')}
                 </Link>
               )}
             </div>

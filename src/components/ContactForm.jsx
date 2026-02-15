@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import API from '../api'
 
 /**
@@ -8,6 +9,7 @@ import API from '../api'
  *    onSuccess(message) : callback appelé après envoi réussi
  */
 const ContactForm = ({ onSuccess }) => {
+  const { t } = useTranslation()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -28,12 +30,12 @@ const ContactForm = ({ onSuccess }) => {
 
   const validate = () => {
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
-      setErrorMsg('Veuillez remplir les champs obligatoires : nom, email et message.')
+      setErrorMsg(t('contact.requiredFields'))
       return false
     }
     // Validation simple de l'email
     if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      setErrorMsg('Veuillez fournir une adresse email valide.')
+      setErrorMsg(t('contact.invalidEmail'))
       return false
     }
     setErrorMsg('')
@@ -56,13 +58,13 @@ const ContactForm = ({ onSuccess }) => {
       await API.post('/contact', formData)
       setSubmitStatus('success')
       setFormData({ name: '', email: '', subject: '', message: '' })
-      if (onSuccess) onSuccess('Message envoyé avec succès. Merci !')
+      if (onSuccess) onSuccess(t('contact.success'))
       // réinitialiser le message après quelques secondes
       setTimeout(() => setSubmitStatus(null), 5000)
     } catch (err) {
       console.error('Erreur envoi contact:', err)
       // essayer d'extraire un message côté serveur si disponible
-      const serverMsg = err?.response?.data?.message || 'Impossible d’envoyer le message pour le moment.'
+      const serverMsg = err?.response?.data?.message || t('contact.error')
       setErrorMsg(serverMsg)
       setSubmitStatus('error')
     } finally {
@@ -75,7 +77,7 @@ const ContactForm = ({ onSuccess }) => {
       {/* Erreur côté validation / serveur */}
       {submitStatus === 'success' && (
         <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg">
-          Message envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.
+          {t('contact.success')}
         </div>
       )}
       {submitStatus === 'error' && errorMsg && (
@@ -87,7 +89,7 @@ const ContactForm = ({ onSuccess }) => {
       {/* Nom */}
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-          Nom complet *
+          {t('contact.name')} *
         </label>
         <input
           type="text"
@@ -97,14 +99,14 @@ const ContactForm = ({ onSuccess }) => {
           onChange={handleChange}
           required
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-dark focus:border-transparent"
-          placeholder="Votre nom"
+          placeholder={t('contact.namePlaceholder')}
         />
       </div>
 
       {/* Email */}
       <div>
         <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-          Email *
+          {t('contact.email')} *
         </label>
         <input
           type="email"
@@ -114,14 +116,14 @@ const ContactForm = ({ onSuccess }) => {
           onChange={handleChange}
           required
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-dark focus:border-transparent"
-          placeholder="votre.email@exemple.com"
+          placeholder={t('contact.emailPlaceholder')}
         />
       </div>
 
       {/* Sujet */}
       <div>
         <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
-          Sujet
+          {t('contact.subject')}
         </label>
         <input
           type="text"
@@ -130,14 +132,14 @@ const ContactForm = ({ onSuccess }) => {
           value={formData.subject}
           onChange={handleChange}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-dark focus:border-transparent"
-          placeholder="Sujet (optionnel)"
+          placeholder={t('contact.subjectPlaceholder')}
         />
       </div>
 
       {/* Message */}
       <div>
         <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-          Message *
+          {t('contact.message')} *
         </label>
         <textarea
           id="message"
@@ -147,7 +149,7 @@ const ContactForm = ({ onSuccess }) => {
           required
           rows="6"
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-dark focus:border-transparent resize-none"
-          placeholder="Votre message..."
+          placeholder={t('contact.messagePlaceholder')}
         />
       </div>
 
@@ -156,7 +158,7 @@ const ContactForm = ({ onSuccess }) => {
         disabled={isSubmitting}
         className={`btn-primary w-full ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
       >
-        {isSubmitting ? 'Envoi en cours...' : 'Envoyer le message'}
+        {isSubmitting ? t('contact.sending') : t('common.submit')}
       </button>
     </form>
   )

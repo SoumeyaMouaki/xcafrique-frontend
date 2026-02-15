@@ -1,38 +1,40 @@
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import SEO from '../components/SEO'
 
 /**
  * Page À propos - Présentation du blog et de la journaliste
  */
 const About = () => {
+  const { t } = useTranslation()
   return (
     <div className="container mx-auto px-4 py-12 max-w-4xl">
       <SEO
-        title="À propos - XCAfrique"
+        title={t('about.title') + ' - XCAfrique'}
         description="Découvrez XCAfrique, le blog professionnel d'actualité aéronautique africaine, et Soumeya Mouaki Benani Benani, journaliste et consultante en communication spécialisée dans le secteur aérien."
         keywords="à propos, XCAfrique, journaliste aviation, blog aéronautique, Soumeya Mouaki Benani Benani"
       />
       <h1 className="text-4xl font-bold text-primary-dark mb-8 text-center">
-        À propos de XCAfrique
+        {t('about.title')}
       </h1>
 
       {/* Section Présentation du blog */}
       <section className="mb-12">
         <h2 className="text-2xl font-semibold text-primary-dark mb-4">
-          Notre mission
+          {t('about.mission')}
         </h2>
         <div className="prose prose-lg max-w-none">
           <p className="text-gray-700 mb-4">
-            <strong>XCAfrique</strong> est un média professionnel dédié à l'actualité aéronautique africaine. Notre ambition est d'offrir une information fiable, vérifiée et contextualisée sur l'ensemble du secteur aérien du continent.
+            <strong>XCAfrique</strong> {t('about.missionText1')}
           </p>
           <p className="text-gray-700 mb-4">
-            Dans un environnement où l'information circule vite, parfois de manière incomplète ou non vérifiée, <strong>XCAfrique</strong> se positionne comme une plateforme de référence pour les professionnels de l'aviation, les passionnés et tous ceux qui suivent l'évolution du transport aérien en Afrique.
+            {t('about.missionText2')}
           </p>
           <p className="text-gray-700 mb-4">
-            Nous couvrons un large éventail de thématiques : actualité des compagnies aériennes, sécurité et réglementation, infrastructures aéroportuaires, formation, innovation, marché africain, développement durable et analyse sectorielle.
+            {t('about.missionText3')}
           </p>
           <p className="text-gray-700">
-            Notre approche repose sur trois piliers : <strong>rigueur</strong>, <strong>transparence</strong> et <strong>vérification</strong> systématique des faits. Nous privilégions une information claire, documentée et utile, pensée pour accompagner la croissance d'un secteur stratégique.
+            {t('about.missionText4')}
           </p>
         </div>
       </section>
@@ -52,17 +54,17 @@ const About = () => {
               Soumeya Mouaki Benani Benani
             </h2>
             <p className="text-lg font-semibold text-primary-dark mb-2">
-              Fondatrice de XCAfrique
+              {t('about.founder')}
             </p>
              
               <p className="text-gray-700 mb-4">
-                Diplômée d'un master en communication et relations publiques, elle a travaillé plusieurs années comme Personnel Navigant Commercial, une expérience qui lui a offert une connaissance concrète des opérations aériennes, de la sûreté et des réalités internes du transport aérien.
+                {t('about.founderBio1')}
               </p>
               <p className="text-gray-700 mb-4">
-                Passionnée par l'aviation et la production d'information fiable, elle a également collaboré comme rédactrice web, développant un style clair, précis et documenté. Son champ d'expertise touche à l'actualité aéronautique, la sécurité, l'innovation, les compagnies aériennes, l'expérience passager et l'évolution des métiers du secteur.
+                {t('about.founderBio2')}
               </p>
               <p className="text-gray-700">
-                Convaincue de l'importance d'un média sérieux et rigoureux pour accompagner le développement du transport aérien en Afrique, elle a fondé XCAfrique, une plateforme dédiée à l'analyse, à la vérification et à la diffusion d'informations aéronautiques fiables. À travers XCAfrique, elle défend une information factuelle, structurée et transparente.
+                {t('about.founderBio3')}
               </p>
             </div>
           </div>
@@ -71,31 +73,31 @@ const About = () => {
       {/* Section Valeurs */}
       <section>
         <h2 className="text-2xl font-semibold text-primary-dark mb-6">
-          Nos valeurs
+          {t('about.values')}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white border-l-4 border-primary-dark p-6 rounded">
             <h3 className="text-xl font-semibold text-primary-dark mb-2">
-              Fiabilité
+              {t('about.reliability')}
             </h3>
             <p className="text-gray-700">
-              Chaque information est vérifiée et croisée avec plusieurs sources avant publication.
+              {t('about.reliabilityText')}
             </p>
           </div>
           <div className="bg-white border-l-4 border-accent-orange p-6 rounded">
             <h3 className="text-xl font-semibold text-primary-dark mb-2">
-              Professionnalisme
+              {t('about.professionalism')}
             </h3>
             <p className="text-gray-700">
-              Un traitement rigoureux et approfondi de l'actualité aéronautique africaine.
+              {t('about.professionalismText')}
             </p>
           </div>
           <div className="bg-white border-l-4 border-primary-light p-6 rounded">
             <h3 className="text-xl font-semibold text-primary-dark mb-2">
-              Indépendance
+              {t('about.independence')}
             </h3>
             <p className="text-gray-700">
-              Une approche éditoriale indépendante et objective, sans influence extérieure.
+              {t('about.independenceText')}
             </p>
           </div>
         </div>
@@ -107,7 +109,7 @@ const About = () => {
           to="/contact"
           className="btn-primary inline-block"
         >
-          Nous contacter
+          {t('about.contactUs')}
         </Link>
       </div>
     </div>

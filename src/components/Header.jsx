@@ -1,12 +1,15 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import API from '../api'
+import LanguageSwitcher from './LanguageSwitcher'
 
 /**
  * Header - En-tête sticky avec logo, navigation, recherche et menu mobile
  */
 const Header = () => {
+  const { t } = useTranslation()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
@@ -187,11 +190,11 @@ const Header = () => {
   }
 
   const navLinks = [
-    { to: '/', label: 'Home' },
-    { to: '/categories', label: 'Categories' },
-    { to: '/videos', label: 'Videos' },
-    { to: '/about', label: 'About' },
-    { to: '/contact', label: 'Contact' },
+    { to: '/', label: t('nav.home') },
+    { to: '/categories', label: t('nav.categories') },
+    { to: '/videos', label: t('nav.videos') },
+    { to: '/about', label: t('nav.about') },
+    { to: '/contact', label: t('nav.contact') },
   ]
 
   return (
@@ -226,11 +229,14 @@ const Header = () => {
 
           {/* Search and Mobile Menu */}
           <div className="flex items-center space-x-4">
+            {/* Language Switcher */}
+            <LanguageSwitcher />
+            
             {/* Search Icon */}
             <button
               onClick={() => setIsSearchOpen(!isSearchOpen)}
               className="text-white hover:text-accent-orange transition-colors p-2"
-              aria-label="Search"
+              aria-label={t('nav.search')}
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -241,7 +247,7 @@ const Header = () => {
             <button
               className="lg:hidden text-white focus:outline-none"
               onClick={toggleMenu}
-              aria-label="Toggle menu"
+              aria-label={t('nav.menu')}
             >
               <motion.div
                 animate={isMenuOpen ? { rotate: 180 } : { rotate: 0 }}
@@ -293,7 +299,7 @@ const Header = () => {
                           }
                         }
                       }}
-                      placeholder="Rechercher des articles..."
+                      placeholder={t('nav.searchPlaceholder')}
                       className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-accent-orange focus:bg-white/20 relative"
                     />
                     
@@ -321,13 +327,13 @@ const Header = () => {
                           {loadingSuggestions ? (
                             <div className="p-4 text-center text-gray-600">
                               <div className="inline-block w-6 h-6 border-3 border-accent-orange border-t-transparent rounded-full animate-spin"></div>
-                              <span className="ml-3 text-sm font-medium">Chargement des suggestions...</span>
+                              <span className="ml-3 text-sm font-medium">{t('search.loadingSuggestions')}</span>
                             </div>
                           ) : suggestions.length > 0 ? (
                             <div className="py-2">
                               <div className="px-4 py-2 bg-gray-50 border-b border-gray-200">
                                 <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                                  Suggestions ({suggestions.length})
+                                  {t('search.suggestions')} ({suggestions.length})
                                 </p>
                               </div>
                               <ul>
@@ -365,10 +371,10 @@ const Header = () => {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                               </svg>
                               <p className="text-gray-500 text-sm font-medium">
-                                Aucune suggestion trouvée
+                                {t('search.noSuggestions')}
                               </p>
                               <p className="text-gray-400 text-xs mt-1">
-                                Essayez avec d'autres mots-clés
+                                {t('search.tryOtherKeywords')}
                               </p>
                             </div>
                           ) : null}
@@ -380,7 +386,7 @@ const Header = () => {
                     type="submit"
                     className="bg-accent-orange text-white px-6 py-2 rounded-lg font-medium hover:bg-orange-600 transition-colors"
                   >
-                    Rechercher
+                    {t('common.search')}
                   </button>
                 </form>
               </div>

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import ContactForm from '../components/ContactForm'
 import SEO from '../components/SEO'
 
@@ -5,19 +6,19 @@ import SEO from '../components/SEO'
  * Page Contact - Formulaire de contact et informations de contact
  */
 const Contact = () => {
+  const { t } = useTranslation()
   return (
     <div className="container mx-auto px-4 py-12 max-w-4xl">
       <SEO
-        title="Contact - XCAfrique"
+        title={t('contact.title') + ' - XCAfrique'}
         description="Contactez XCAfrique pour toute question, suggestion ou demande d'information sur l'actualité aéronautique africaine."
         keywords="contact, XCAfrique, formulaire contact"
       />
       <h1 className="text-4xl font-bold text-primary-dark mb-4 text-center">
-        Contactez-nous
+        {t('contact.title')}
       </h1>
       <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-        Une question, une suggestion ou une demande d'information ? 
-        N'hésitez pas à nous contacter. Nous vous répondrons dans les plus brefs délais.
+        {t('contact.subtitle')}
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -25,7 +26,7 @@ const Contact = () => {
         <div className="lg:col-span-2">
           <div className="bg-white rounded-lg shadow-md p-8">
             <h2 className="text-2xl font-semibold text-primary-dark mb-6">
-              Envoyez-nous un message
+              {t('contact.sendMessage')}
             </h2>
             <ContactForm />
           </div>
@@ -35,7 +36,7 @@ const Contact = () => {
         <aside className="lg:col-span-1">
           <div className="bg-gray-50 rounded-lg p-6 mb-6">
             <h3 className="text-xl font-semibold text-primary-dark mb-4">
-              Informations de contact
+              {t('contact.contactInfo')}
             </h3>
             <div className="space-y-4">
               <div className="flex items-start">
@@ -43,7 +44,7 @@ const Contact = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
                 <div>
-                  <p className="font-medium text-gray-900">Email</p>
+                  <p className="font-medium text-gray-900">{t('contact.email')}</p>
                   <p className="text-gray-600">contact@xcafrique.org</p>
                 </div>
               </div>
@@ -53,10 +54,10 @@ const Contact = () => {
           {/* Réseaux sociaux */}
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="text-xl font-semibold text-primary-dark mb-4">
-              Suivez-nous
+              {t('contact.followUs')}
             </h3>
             <p className="text-gray-600 mb-4 text-sm">
-              Restez connecté avec nous sur les réseaux sociaux pour ne rien manquer de l'actualité.
+              {t('contact.followUsText')}
             </p>
             <div className="flex space-x-4">
               <a

@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 
 /**
  * HeroSection - Section héro avec image de fond, overlay et animations
  */
 const HeroSection = () => {
+  const { t } = useTranslation()
   return (
     <section className="relative h-[600px] md:h-[700px] overflow-hidden">
       {/* Image de fond */}
@@ -27,11 +29,10 @@ const HeroSection = () => {
           className="text-white max-w-2xl"
         >
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
-            Air News Cross-Checked
+            {t('hero.title')}
           </h1>
           <p className="text-lg md:text-xl text-gray-200 mb-8">
-            Votre source d'information fiable sur l'actualité aéronautique africaine. 
-            Couverture complète de l'industrie avec analyses approfondies et vérifications rigoureuses.
+            {t('hero.subtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <motion.div
@@ -42,7 +43,7 @@ const HeroSection = () => {
                 to="/categories"
                 className="inline-block bg-accent-orange text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-shadow duration-200"
               >
-                Lire les dernières actualités
+                {t('hero.readNews')}
               </Link>
             </motion.div>
             <motion.div
@@ -53,7 +54,7 @@ const HeroSection = () => {
                 to="/follow"
                 className="inline-block bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary-dark transition-colors duration-200"
               >
-                S'abonner
+                {t('hero.subscribe')}
               </Link>
             </motion.div>
           </div>

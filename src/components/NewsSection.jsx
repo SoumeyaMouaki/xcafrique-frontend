@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import useArticles from '../hooks/useArticles'
 import useReadArticles from '../hooks/useReadArticles'
 import LoadingSpinner from './LoadingSpinner'
@@ -9,6 +10,7 @@ import ErrorMessage from './ErrorMessage'
  * NewsSection - Grille d'actualités avec 6 articles
  */
 const NewsSection = () => {
+  const { t, i18n } = useTranslation()
   const { articles, loading, error } = useArticles({ limit: 6, page: 1 })
   const { isRead } = useReadArticles()
 
@@ -16,7 +18,7 @@ const NewsSection = () => {
     return (
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <LoadingSpinner text="Chargement des actualités..." />
+          <LoadingSpinner text={t('news.loading')} />
         </div>
       </section>
     )
@@ -27,7 +29,7 @@ const NewsSection = () => {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <ErrorMessage 
-            message={error.message || "Impossible de charger les actualités"} 
+            message={error.message || t('news.error')} 
             onRetry={() => window.location.reload()}
           />
         </div>
@@ -45,12 +47,12 @@ const NewsSection = () => {
           transition={{ duration: 0.6 }}
           className="text-3xl md:text-4xl font-bold text-primary-dark mb-12 text-center"
         >
-          A la Une
+          {t('news.featured')}
         </motion.h2>
 
         {articles.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">Aucun article disponible pour le moment.</p>
+            <p className="text-gray-500 text-lg">{t('news.noArticles')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -118,7 +120,7 @@ const NewsSection = () => {
                       <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
-                      {date ? new Date(date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Date non disponible'}
+                      {date ? new Date(date).toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'fr-FR', { year: 'numeric', month: 'long', day: 'numeric' }) : t('news.dateNotAvailable')}
                     </div>
 
                     {/* Titre */}
@@ -133,7 +135,7 @@ const NewsSection = () => {
                           fill="none" 
                           stroke="currentColor" 
                           viewBox="0 0 24 24"
-                          aria-label="Article lu"
+                          aria-label={t('news.readArticle')}
                         >
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>

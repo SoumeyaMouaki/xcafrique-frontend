@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Analytics } from '@vercel/analytics/react'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -20,6 +21,13 @@ import Follow from './pages/Follow'
  * Configure le routing et la structure générale de la page
  */
 function App() {
+  const { i18n } = useTranslation()
+  
+  // Mettre à jour l'attribut lang du HTML quand la langue change
+  useEffect(() => {
+    document.documentElement.lang = i18n.language
+  }, [i18n.language])
+
   // Empêcher le focus automatique sur les inputs au chargement
   useEffect(() => {
     // Retirer le focus de tout élément qui pourrait l'avoir
